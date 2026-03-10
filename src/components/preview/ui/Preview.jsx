@@ -32,13 +32,13 @@ const Preview = () => {
   ];
 
   return (
-    <div className="md:max-w-[60%] sticky top-0 preview rm-padding-print bg-slate-800/60 border-l border-slate-700/50 px-6 py-4 overflow-x-auto md:overflow-y-scroll md:h-screen">
+    <div className="md:max-w-[60%] sticky top-0 preview rm-padding-print bg-slate-800/60 border-l border-slate-700/50 px-6 py-4 overflow-x-auto md:overflow-y-scroll md:h-screen flex items-start justify-center">
       <A4PageWrapper>
         <ModalHighlightMenu/>
         <DragDropContext onDragEnd={onDragEndHandler}>
           <Header resumeData={resumeData} icons={icons}/>
-          <hr className="border-dashed my-2"/>
-          <div className="grid grid-cols-3 gap-6">
+          <hr className="border-dashed my-3"/>
+          <div className="grid grid-cols-3 gap-5">
             <LeftSide resumeData={resumeData}/>
             <RightSide resumeData={resumeData}/>
           </div>

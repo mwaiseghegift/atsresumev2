@@ -20,7 +20,7 @@ const Projects = () => {
       {(provided) => (
         <div {...provided.droppableProps} ref={provided.innerRef}>
           <h2
-            className="section-title mb-1 border-b-2 border-gray-300 editable"
+            className="section-title mb-1.5 border-b-2 border-gray-300 editable"
             contentEditable
             suppressContentEditableWarning
           >
@@ -37,13 +37,13 @@ const Projects = () => {
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
-                  className={`mb-1 ${
+                  className={`mb-3 ${
                     snapshot.isDragging &&
                     "outline-dashed outline-2 outline-gray-400 bg-white"
                   }`}
                 >
                   <div className="flex flex-row justify-between space-y-1">
-                    <p className="content i-bold">{item.name}</p>
+                    <p className="content i-bold">{item.name || item.title}</p>
                     <DateRange
                       startYear={item.startYear}
                       endYear={item.endYear}
@@ -51,14 +51,16 @@ const Projects = () => {
                     />
                   </div>
 
-                  <Link
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="content"
-                  >
-                    {item.link}
-                  </Link>
+                  {item.link && (
+                    <Link
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="content"
+                    >
+                      {item.link}
+                    </Link>
+                  )}
                   <p className="content">{item.description}</p>
 
                   <Droppable

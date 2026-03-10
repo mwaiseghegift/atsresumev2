@@ -15,23 +15,23 @@ const Draggable = dynamic(
 
 const LeftSide = ({ resumeData }) => {
   return (
-    <div className="col-span-1 space-y-2">
+    <div className="col-span-1 space-y-3">
       {resumeData.summary.length > 0 && (
-        <div className="mb-1">
-          <h2 className="section-title mb-1 border-b-2 border-gray-300">
+        <div className="mb-2">
+          <h2 className="section-title mb-1.5 border-b-2 border-gray-300">
             Summary
           </h2>
-          <p className="content break-words">{resumeData.summary}</p>
+          <p className="content wrap-break-word leading-relaxed">{resumeData.summary}</p>
         </div>
       )}
 
       {resumeData.education.length > 0 && (
-        <div className="mb-1">
-          <h2 className="section-title mb-1 border-b-2 border-gray-300">
+        <div className="mb-2">
+          <h2 className="section-title mb-1.5 border-b-2 border-gray-300">
             Education
           </h2>
           {resumeData.education.map((item, index) => (
-            <div key={index} className="mb-1">
+            <div key={index} className="mb-2">
               <p className="content i-bold">{item.degree}</p>
               <p className="content">{item.school}</p>
               <DateRange
@@ -58,7 +58,7 @@ const LeftSide = ({ resumeData }) => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={`mb-1 ${
+                    className={`mb-2 ${
                       snapshot.isDragging &&
                       "outline-dashed outline-2 outline-gray-400 bg-white"
                     }`}

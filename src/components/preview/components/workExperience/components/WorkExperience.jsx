@@ -23,7 +23,7 @@ const WorkExperience = ({item, index}) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className={`mb-1 ${
+          className={`mb-3 ${
             snapshot.isDragging &&
             "outline-dashed outline-2 outline-gray-400 bg-white"
           }`}

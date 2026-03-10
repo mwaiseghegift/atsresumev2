@@ -10,6 +10,9 @@ import Form from "../components/form/ui/Form";
 
 const ResumeContext = createContext(DefaultResumeData);
 
+// Export the context so it can be used in other components
+export { ResumeContext };
+
 // server side rendering false
 const Print = dynamic(() => import("../components/utility/WinPrint"), {
   ssr: false,
@@ -69,4 +72,3 @@ export default function Builder() {
     </>
   );
 }
-export {ResumeContext};

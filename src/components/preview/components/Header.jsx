@@ -4,9 +4,9 @@ import { MdPhone, MdEmail, MdLocationOn } from "react-icons/md";
 
 const Header = ({ resumeData, icons }) => {
   return (
-    <div className="f-col items-center mb-1">
+    <div className="f-col items-center mb-3">
       {resumeData.profilePicture.length > 0 && (
-        <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-fuchsia-700">
+        <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-fuchsia-700 mb-2">
           <Image
             src={resumeData.profilePicture}
             alt="profile"
@@ -18,11 +18,11 @@ const Header = ({ resumeData, icons }) => {
       )}
 
       <h1 className="name">{resumeData.name}</h1>
-      <p className="profession">{resumeData.position}</p>
+      <p className="profession mb-2">{resumeData.position}</p>
 
       <ContactInfo
-        mainclass="flex flex-row gap-1 mb-1 contact"
-        linkclass="inline-flex items-center gap-1"
+        mainclass="flex flex-wrap justify-center gap-x-3 gap-y-1 mb-2 contact"
+        linkclass="inline-flex items-center gap-1 whitespace-nowrap"
         teldata={resumeData.contactInformation}
         emaildata={resumeData.email}
         addressdata={resumeData.address}
@@ -31,7 +31,7 @@ const Header = ({ resumeData, icons }) => {
         addressicon={<MdLocationOn />}
       />
 
-      <div className="grid grid-cols-3 gap-1">
+      <div className="flex flex-wrap justify-center gap-2">
         {resumeData.socialMedia.map((socialMedia, index) => {
           return (
             <a
@@ -41,7 +41,7 @@ const Header = ({ resumeData, icons }) => {
               title={socialMedia.socialMedia}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1 social-media align-center justify-center "
+              className="inline-flex items-center gap-1 social-media whitespace-nowrap"
             >
               {icons.map((icon, index) => {
                 if (icon.name === socialMedia.socialMedia.toLowerCase()) {
