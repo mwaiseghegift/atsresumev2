@@ -1,27 +1,37 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+    --font-sans: "Inter", "sans-serif";
+}
 
 @layer base {
     
+    html {
+        scroll-behavior: smooth;
+    }
+
     body {
-        @apply font-[sans-serif];
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
     }
 
     ::-webkit-scrollbar {
-        @apply w-2.5 h-2.5;
+        width: 0.3rem;
+        height: 0.3rem;
     }
 
     ::-webkit-scrollbar-track {
-        @apply bg-gray-200;
+        background: #0f172a;
     }
 
     ::-webkit-scrollbar-thumb {
-        @apply bg-fuchsia-600;
+        background: #a21caf;
+        border-radius: 999px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        @apply bg-fuchsia-700;
+        background: #c026d3;
     }
 
     textarea, input:focus {
@@ -37,43 +47,48 @@
     }
 }
 
-@layer components{
-    .pi{
-        @apply p-2 mb-2 text-black bg-white rounded text-[0.9rem];
-    }
+@utility pi {
+    @apply p-2.5 mb-2 text-white bg-slate-800 border border-slate-700 rounded-lg text-[0.875rem] placeholder-slate-400
+           transition-all duration-200
+           focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-500/20 focus:outline-none;
+}
 
-    .profileInput{
-        @apply pi file:border-0 file:bg-fuchsia-500 file:text-white file:rounded-sm;
-    }
+@utility profileInput {
+    @apply pi file:border-0 file:bg-fuchsia-600 file:text-white file:rounded file:mr-2 file:px-2 file:py-1 file:text-xs file:cursor-pointer file:hover:bg-fuchsia-500 file:transition-colors;
+}
 
-    .flex-col-gap-2{
-        @apply flex flex-col gap-2;
-    }
+@utility flex-col-gap-2 {
+    @apply flex flex-col gap-2;
+}
 
-    .flex-wrap-gap-2{
-        @apply flex flex-wrap gap-2;
-    }
+@utility flex-wrap-gap-2 {
+    @apply flex flex-wrap gap-2;
+}
 
-    .other-input{
-        @apply p-2 mb-2 text-black bg-white rounded focus:placeholder-transparent;
-    }
+@utility other-input {
+    @apply p-2.5 mb-2 text-white bg-slate-800 border border-slate-700 rounded-lg text-[0.875rem] placeholder-slate-400
+           transition-all duration-200
+           focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-500/20 focus:outline-none focus:placeholder-transparent;
+}
 
-    .input-title{
-        @apply text-[1rem] text-white font-semibold;
-    }
+@utility input-title {
+    @apply text-[0.7rem] text-slate-400 font-semibold uppercase tracking-widest mb-2;
+}
 
-    .f-col{
-        @apply flex flex-col;
-    }
+@utility section-card {
+    @apply bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 mb-3 backdrop-blur-sm;
+}
 
-    .grid-4{
-        @apply grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4;
-    }
+@utility f-col {
+    @apply flex flex-col;
+}
 
-    .editable{
-        @apply hover:bg-gray-100 hover:cursor-text outline-none;
-    }
+@utility grid-4 {
+    @apply grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3;
+}
 
+@utility editable {
+    @apply hover:bg-gray-100 hover:cursor-text outline-none;
 }
 
 .name{

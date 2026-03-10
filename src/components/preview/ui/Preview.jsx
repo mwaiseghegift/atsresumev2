@@ -13,7 +13,7 @@ import {onDragEndHandler} from "../utils/onDrugEndHandler";
 
 const DragDropContext = dynamic(
   () =>
-    import("react-beautiful-dnd").then((mod) => {
+    import("@hello-pangea/dnd").then((mod) => {
       return mod.DragDropContext;
     }),
   {ssr: false}
@@ -32,7 +32,7 @@ const Preview = () => {
   ];
 
   return (
-    <div className="md:max-w-[60%] sticky top-0 preview rm-padding-print p-6 md:overflow-y-scroll md:h-screen">
+    <div className="md:max-w-[60%] sticky top-0 preview rm-padding-print bg-slate-800/60 border-l border-slate-700/50 px-6 py-4 overflow-x-auto md:overflow-y-scroll md:h-screen">
       <A4PageWrapper>
         <ModalHighlightMenu/>
         <DragDropContext onDragEnd={onDragEndHandler}>

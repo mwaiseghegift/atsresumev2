@@ -1,13 +1,13 @@
 import "../styles/globals.css";
 
-export default function RootLayout({children}) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
-    <body>
-    <div className={'content'}>
-      {children}
-    </div>
-    </body>
+      <body className="bg-slate-900">
+        <div className={'content'}>
+          {children}
+        </div>
+      </body>
     </html>
   );
 }

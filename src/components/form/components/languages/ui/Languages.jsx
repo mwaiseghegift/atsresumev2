@@ -25,8 +25,9 @@ const Languages = () => {
                 addLanguage(resumeData, setResumeData, "languages")
               }}
               aria-label="Add"
-              className="p-2 w-[37px] text-white bg-fuchsia-700 rounded text-xl">
-        <MdAddCircle/>
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-semibold shadow-sm transition-all duration-200">
+        <MdAddCircle className="text-base"/>
+        Add
       </button>
     </div>
   );
