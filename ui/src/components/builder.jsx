@@ -5,6 +5,7 @@ import Meta from "../components/meta/Meta";
 import FormCloseOpenBtn from "../components/FormCloseOpenBtn";
 import Preview from "../components/preview/ui/Preview";
 import DefaultResumeData from "../components/utility/DefaultResumeData";
+import JobCustomizer from "../components/JobCustomizer";
 import dynamic from "next/dynamic";
 import Form from "../components/form/ui/Form";
 
@@ -45,6 +46,12 @@ export default function Builder() {
     console.log(resumeData);
   };
 
+  // Handle customized resume data from JobCustomizer
+  const handleCustomized = (customizedData, matchScore) => {
+    setResumeData(customizedData);
+    console.log("Resume customized with match score:", matchScore);
+  };
+
   return (
     <>
       <ResumeContext.Provider
@@ -68,6 +75,7 @@ export default function Builder() {
         </div>
         <FormCloseOpenBtn formClose={formClose} setFormClose={setFormClose}/>
         <Print/>
+        <JobCustomizer resumeData={resumeData} onCustomized={handleCustomized}/>
       </ResumeContext.Provider>
     </>
   );
