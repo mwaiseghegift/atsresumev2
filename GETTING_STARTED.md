@@ -1,8 +1,8 @@
-# 🚀 Getting Started with ATS Resume AI Customization
+# Getting Started with ATS Resume AI Customization
 
 This guide will help you set up and run the complete ATS Resume project with AI-powered resume customization using Google Gemini.
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
@@ -11,7 +11,7 @@ Before you begin, ensure you have the following installed:
 - **Git** (for version control)
 - **Google Gemini API Key** (get one free at <https://makersuite.google.com/app/apikey>)
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 atsresumev2/
@@ -92,6 +92,25 @@ python manage.py runserver
 The API will be available at: **<http://localhost:8000>**
 
 Django Admin: **<http://localhost:8000/admin>**
+
+## 🚀 Easy Start (Both Backend and UI)
+
+Instead of manually starting each part, you can use the scripts to start both at once.
+
+### Windows
+
+Double-click `start.bat` or run:
+```cmd
+start.bat
+```
+
+### Linux / macOS
+
+Make the script executable and run it:
+```bash
+chmod +x start.sh
+./start.sh
+```
 
 ## 🎨 Frontend Setup (Next.js UI)
 

@@ -41,8 +41,13 @@ class CustomizeResumeRequestSerializer(serializers.Serializer):
     
     def validate_resume_data(self, value):
         """Validate that resume_data contains necessary fields"""
-        required_keys = ['personalInfo']
-        for key in required_keys:
-            if key not in value:
-                raise serializers.ValidationError(f"Missing required field: {key}")
+        # Check for either the nested structure (personalInfo) or flat structure (name, email, etc.)
+        has_personal_info = 'personalInfo' in value
+        has_flat_structure = 'name' in value or 'email' in value
+        
+        if not has_personal_info and not has_flat_structure:
+            raise serializers.ValidationError(
+                "Resume data must contain either 'personalInfo' object or personal fields like 'name', 'email', etc."
+            )
+        
         return value
