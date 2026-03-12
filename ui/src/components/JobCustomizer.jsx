@@ -1,6 +1,8 @@
 "use client";
 
+
 import { useState } from 'react';
+import { customizeResume } from '../services/customizeService';
 
 export default function JobCustomizer({ resumeData, onCustomized }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,29 +30,8 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
     setLoading(true);
     setError('');
     setResult(null);
-
     try {
-      const endpoint = saveToDb ? '/api/customize/' : '/api/quick-customize/';
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          resume_data: resumeData,
-          job_title: formData.jobTitle,
-          job_company: formData.jobCompany,
-          job_description: formData.jobDescription,
-          job_requirements: formData.jobRequirements
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to customize resume');
-      }
-
+      const data = await customizeResume({ resumeData, formData, saveToDb });
       if (data.success) {
         setResult(data);
         if (onCustomized) {
