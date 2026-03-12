@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'core',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,5 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Gemini API Configuration
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
+
+AUTH_USER_MODEL = 'accounts.User'
