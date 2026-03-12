@@ -1,0 +1,45 @@
+{
+  "name": "Resume Endpoints",
+  "requests": [
+    {
+      "name": "List Resumes",
+      "method": "GET",
+      "url": "http://localhost:8000/api/resumes/",
+      "description": "Get a list of all resumes."
+    },
+    {
+      "name": "Create Resume",
+      "method": "POST",
+      "url": "http://localhost:8000/api/resumes/",
+      "body": {
+        "name": "string",
+        "position": "string",
+        "contactInformation": "string",
+        "email": "string",
+        "address": "string",
+        "profilePicture": "string",
+        "socialMedia": []
+      },
+      "description": "Create a new resume."
+    },
+    {
+      "name": "Retrieve Resume",
+      "method": "GET",
+      "url": "http://localhost:8000/api/resumes/{id}/",
+      "description": "Get details of a specific resume by ID."
+    },
+    {
+      "name": "Update Resume",
+      "method": "PUT",
+      "url": "http://localhost:8000/api/resumes/{id}/",
+      "body": {},
+      "description": "Update a resume by ID."
+    },
+    {
+      "name": "Delete Resume",
+      "method": "DELETE",
+      "url": "http://localhost:8000/api/resumes/{id}/",
+      "description": "Delete a resume by ID."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Job Description Endpoints",
+  "requests": [
+    {
+      "name": "List Job Descriptions",
+      "method": "GET",
+      "url": "http://localhost:8000/api/job-descriptions/",
+      "description": "Get a list of all job descriptions."
+    },
+    {
+      "name": "Create Job Description",
+      "method": "POST",
+      "url": "http://localhost:8000/api/job-descriptions/",
+      "body": {
+        "title": "string",
+        "company": "string",
+        "description": "string",
+        "requirements": "string"
+      },
+      "description": "Create a new job description."
+    },
+    {
+      "name": "Retrieve Job Description",
+      "method": "GET",
+      "url": "http://localhost:8000/api/job-descriptions/{id}/",
+      "description": "Get details of a specific job description by ID."
+    },
+    {
+      "name": "Update Job Description",
+      "method": "PUT",
+      "url": "http://localhost:8000/api/job-descriptions/{id}/",
+      "body": {},
+      "description": "Update a job description by ID."
+    },
+    {
+      "name": "Delete Job Description",
+      "method": "DELETE",
+      "url": "http://localhost:8000/api/job-descriptions/{id}/",
+      "description": "Delete a job description by ID."
+    }
+  ]
+}

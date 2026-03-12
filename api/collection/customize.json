@@ -1,0 +1,31 @@
+{
+  "name": "Customization Endpoints",
+  "requests": [
+    {
+      "name": "Customize Resume",
+      "method": "POST",
+      "url": "http://localhost:8000/api/customize/",
+      "body": {
+        "resume_data": {},
+        "job_title": "string",
+        "job_company": "string",
+        "job_description": "string",
+        "job_requirements": "string"
+      },
+      "description": "Customize a resume for a job."
+    },
+    {
+      "name": "Quick Customize Resume",
+      "method": "POST",
+      "url": "http://localhost:8000/api/quick-customize/",
+      "body": {
+        "resume_data": {},
+        "job_title": "string",
+        "job_company": "string",
+        "job_description": "string",
+        "job_requirements": "string"
+      },
+      "description": "Quickly customize a resume for a job."
+    }
+  ]
+}
