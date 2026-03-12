@@ -4,7 +4,7 @@ import { MdPhone, MdEmail, MdLocationOn } from "react-icons/md";
 
 const Header = ({ resumeData, icons }) => {
   return (
-    <div className="f-col items-center mb-3">
+    <div className="f-col items-center mb-3 exclude-print">
       {resumeData.profilePicture.length > 0 && (
         <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-fuchsia-700 mb-2">
           <Image
