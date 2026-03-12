@@ -15,17 +15,32 @@ class ResumeViewSet(viewsets.ModelViewSet):
     queryset = Resume.objects.all()
     serializer_class = ResumeSerializer
 
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return self.queryset.filter(user=self.request.user)
+        return self.queryset.filter(user__isnull=True)
+
 
 class JobDescriptionViewSet(viewsets.ModelViewSet):
     """ViewSet for JobDescription CRUD operations"""
     queryset = JobDescription.objects.all()
     serializer_class = JobDescriptionSerializer
 
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return self.queryset.filter(user=self.request.user)
+        return self.queryset.filter(user__isnull=True)
+
 
 class CustomizedResumeViewSet(viewsets.ReadOnlyModelViewSet):
     """ViewSet for viewing CustomizedResume records"""
     queryset = CustomizedResume.objects.all()
     serializer_class = CustomizedResumeSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return self.queryset.filter(user=self.request.user)
+        return self.queryset.filter(user__isnull=True)
     
     @action(detail=False, methods=['get'])
     def by_resume(self, request):
@@ -81,15 +96,18 @@ def customize_resume(request):
         # Initialize Gemini service
         gemini_service = GeminiService()
         
+        user = request.user if request.user.is_authenticated else None
+        
         # Save the original resume (optional, for tracking)
-        resume = Resume.objects.create(resume_data=data['resume_data'])
+        resume = Resume.objects.create(resume_data=data['resume_data'], user=user)
         
         # Save the job description
         job_description = JobDescription.objects.create(
             title=data['job_title'],
             company=data.get('job_company', ''),
             description=data['job_description'],
-            requirements=data.get('job_requirements', '')
+            requirements=data.get('job_requirements', ''),
+            user=user
         )
         
         # Customize the resume using Gemini
@@ -106,7 +124,8 @@ def customize_resume(request):
             job_description=job_description,
             customized_data=customized_data,
             customization_notes=notes,
-            match_score=match_score
+            match_score=match_score,
+            user=user
         )
         
         # Return the result

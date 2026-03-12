@@ -1,8 +1,10 @@
 from django.db import models
+from django.conf import settings
 import json
 
 class Resume(models.Model):
     """Model to store resume data"""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='resumes', null=True, blank=True)
     resume_data = models.JSONField(help_text="Complete resume data in JSON format")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -16,6 +18,7 @@ class Resume(models.Model):
 
 class JobDescription(models.Model):
     """Model to store job descriptions"""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='job_descriptions', null=True, blank=True)
     title = models.CharField(max_length=255)
     company = models.CharField(max_length=255, blank=True)
     description = models.TextField(help_text="Full job description text")
@@ -31,6 +34,7 @@ class JobDescription(models.Model):
 
 class CustomizedResume(models.Model):
     """Model to store customized resumes"""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='customized_resumes_owned', null=True, blank=True)
     original_resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name='customizations')
     job_description = models.ForeignKey(JobDescription, on_delete=models.CASCADE, related_name='customized_resumes')
     customized_data = models.JSONField(help_text="Customized resume data optimized for the job")

@@ -8,6 +8,8 @@ import DefaultResumeData from "../components/utility/DefaultResumeData";
 import JobCustomizer from "../components/JobCustomizer";
 import dynamic from "next/dynamic";
 import Form from "../components/form/ui/Form";
+import { useAuth } from "../context/AuthContext";
+import { getCsrfToken } from "../components/utility/csrf";
 
 const ResumeContext = createContext(DefaultResumeData);
 
@@ -25,6 +27,33 @@ export default function Builder() {
 
   // form hide/show
   const [formClose, setFormClose] = useState(false);
+
+  // auth
+  const { user } = useAuth();
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  const handleSaveDefault = async () => {
+    setIsSaving(true);
+    setSaveSuccess(false);
+    try {
+       const res = await fetch('http://localhost:8000/api/resumes/', {
+          method: 'POST',
+          headers: { 
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCsrfToken() || ''
+          },
+          body: JSON.stringify({ resume_data: resumeData }),
+          credentials: 'include'
+       });
+       if(res.ok) setSaveSuccess(true);
+       setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (e) {
+       console.error(e);
+    } finally {
+       setIsSaving(false);
+    }
+  };
 
   // profile picture
   const handleProfilePicture = (e) => {
@@ -74,6 +103,18 @@ export default function Builder() {
           <Preview/>
         </div>
         <FormCloseOpenBtn formClose={formClose} setFormClose={setFormClose}/>
+        {user && (
+           <button 
+             onClick={handleSaveDefault}
+             disabled={isSaving}
+             className="exclude-print fixed top-24 right-8 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition-all hover:scale-105 z-40 disabled:opacity-50"
+           >
+             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+             </svg>
+             {isSaving ? 'Saving...' : saveSuccess ? 'Saved!' : 'Save Default CV'}
+           </button>
+        )}
         <Print/>
         <JobCustomizer resumeData={resumeData} onCustomized={handleCustomized}/>
       </ResumeContext.Provider>
