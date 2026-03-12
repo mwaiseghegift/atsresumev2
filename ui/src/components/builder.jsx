@@ -9,7 +9,7 @@ import JobCustomizer from "../components/JobCustomizer";
 import dynamic from "next/dynamic";
 import Form from "../components/form/ui/Form";
 import { useAuth } from "../context/AuthContext";
-import { getCsrfToken } from "../components/utility/csrf";
+import { fetchCsrfToken } from "../components/utility/csrf";
 
 const ResumeContext = createContext(DefaultResumeData);
 
@@ -37,11 +37,12 @@ export default function Builder() {
     setIsSaving(true);
     setSaveSuccess(false);
     try {
+       const csrfToken = await fetchCsrfToken();
        const res = await fetch('http://localhost:8000/api/resumes/', {
           method: 'POST',
           headers: { 
               'Content-Type': 'application/json',
-              'X-CSRFToken': getCsrfToken() || ''
+              'X-CSRFToken': csrfToken
           },
           body: JSON.stringify({ resume_data: resumeData }),
           credentials: 'include'

@@ -8,4 +8,5 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('me/', views.UserDetailView.as_view(), name='user-detail'),
+    path('csrf/', views.CsrfTokenView.as_view(), name='csrf-token'),
 ]

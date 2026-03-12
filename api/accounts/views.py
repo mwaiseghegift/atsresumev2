@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
 
 
 # Import serializers from local file
@@ -42,3 +43,7 @@ class UserDetailView(APIView):
 	@method_decorator(ensure_csrf_cookie)
 	def get(self, request):
 		return Response({'user': UserSerializer(request.user).data})
+
+class CsrfTokenView(APIView):
+	def get(self, request):
+		return Response({'csrfToken': get_token(request)})

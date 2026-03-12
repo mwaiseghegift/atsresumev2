@@ -20,6 +20,12 @@ class ResumeViewSet(viewsets.ModelViewSet):
             return self.queryset.filter(user=self.request.user)
         return self.queryset.filter(user__isnull=True)
 
+    def perform_create(self, serializer):
+        if self.request.user.is_authenticated:
+            serializer.save(user=self.request.user)
+        else:
+            serializer.save()
+
 
 class JobDescriptionViewSet(viewsets.ModelViewSet):
     """ViewSet for JobDescription CRUD operations"""

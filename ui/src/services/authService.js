@@ -1,5 +1,5 @@
 import { API_BASE_URL, API_AUTH_ME, API_AUTH_LOGIN, API_AUTH_REGISTER, API_AUTH_LOGOUT } from '../constants/api';
-import { getCsrfToken } from '../components/utility/csrf';
+import { fetchCsrfToken } from '../components/utility/csrf';
 
 export async function fetchAuthUser() {
   const res = await fetch(`${API_BASE_URL}${API_AUTH_ME}`, {
@@ -11,9 +11,13 @@ export async function fetchAuthUser() {
 }
 
 export async function loginUser(username, password) {
+  const csrfToken = await fetchCsrfToken();
   const res = await fetch(`${API_BASE_URL}${API_AUTH_LOGIN}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+    },
     body: JSON.stringify({ username, password }),
     credentials: 'include'
   });
@@ -23,9 +27,13 @@ export async function loginUser(username, password) {
 }
 
 export async function registerUser(username, email, password) {
+  const csrfToken = await fetchCsrfToken();
   const res = await fetch(`${API_BASE_URL}${API_AUTH_REGISTER}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+    },
     body: JSON.stringify({ username, email, password }),
     credentials: 'include'
   });
@@ -40,11 +48,12 @@ export async function registerUser(username, email, password) {
 }
 
 export async function logoutUser() {
+  const csrfToken = await fetchCsrfToken();
   await fetch(`${API_BASE_URL}${API_AUTH_LOGOUT}`, {
     method: 'POST',
     credentials: 'include',
     headers: {
-      'X-CSRFToken': getCsrfToken() || ''
+      'X-CSRFToken': csrfToken
     }
   });
 }
