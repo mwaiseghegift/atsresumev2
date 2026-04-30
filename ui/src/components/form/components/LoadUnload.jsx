@@ -29,12 +29,11 @@ const LoadUnload = () => {
 
   return (
     <div className="section-card mb-4">
-      <p className="text-[0.6rem] text-slate-500 uppercase tracking-widest font-semibold mb-3">Backup Data</p>
+      <p className="text-[0.6rem] theme-muted-text uppercase tracking-widest font-semibold mb-3">Backup Data</p>
       <div className="flex flex-row gap-3">
-        {/* Load */}
         <label className="flex-1 cursor-pointer group">
-          <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-slate-700 bg-slate-800 hover:border-fuchsia-500/50 hover:bg-slate-700 transition-all duration-200 text-xs text-slate-300 font-medium group-hover:text-white">
-            <FaCloudUploadAlt className="text-base text-fuchsia-400 group-hover:text-fuchsia-300 transition-colors" />
+          <div className="theme-button-soft flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium group-hover:text-white">
+            <FaCloudUploadAlt className="text-base theme-accent-text transition-colors" />
             Load Data
           </div>
           <input
@@ -46,10 +45,9 @@ const LoadUnload = () => {
           />
         </label>
 
-        {/* Save */}
         <button
           aria-label="Save Data"
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-slate-700 bg-slate-800 hover:border-emerald-500/50 hover:bg-slate-700 transition-all duration-200 text-xs text-slate-300 font-medium hover:text-white group"
+          className="theme-button-secondary flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium group"
           onClick={(event) =>
             handleDownload(
               resumeData,
@@ -58,7 +56,7 @@ const LoadUnload = () => {
             )
           }
         >
-          <FaCloudDownloadAlt className="text-base text-emerald-400 group-hover:text-emerald-300 transition-colors" />
+          <FaCloudDownloadAlt className="text-base transition-colors" />
           Save Data
         </button>
       </div>

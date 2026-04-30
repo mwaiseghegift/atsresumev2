@@ -51,7 +51,7 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="exclude-print fixed bottom-24 right-8 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 transition-all hover:scale-105 z-40"
+        className="exclude-print theme-float-secondary fixed bottom-24 right-8 flex items-center gap-2 px-6 py-3 rounded-full z-40"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -62,17 +62,16 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
   }
 
   return (
-    <div className="exclude-print fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
+    <div className="exclude-print fixed inset-0 bg-[rgba(6,14,18,0.62)] backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="theme-panel rounded-[1.75rem] max-w-2xl w-full max-h-[90vh] overflow-y-auto text-white">
+        <div className="sticky top-0 bg-[rgba(24,55,68,0.94)] border-b border-[rgba(233,196,106,0.12)] px-6 py-4 flex items-center justify-between backdrop-blur-sm">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Customize Resume for Job</h2>
-            <p className="text-sm text-gray-600 mt-1">AI-powered resume optimization using Gemini</p>
+            <h2 className="theme-heading text-2xl font-bold text-white">Customize Resume for Job</h2>
+            <p className="theme-muted-text text-sm mt-1">AI-powered optimization for a specific role and employer.</p>
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="theme-outline-link"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -85,7 +84,7 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
           {!result && (
             <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium theme-accent-text mb-2">
                   Job Title *
                 </label>
                 <input
@@ -95,12 +94,12 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
                   onChange={handleInputChange}
                   required
                   placeholder="e.g., Senior Software Engineer"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="theme-input"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium theme-accent-text mb-2">
                   Company (Optional)
                 </label>
                 <input
@@ -109,12 +108,12 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
                   value={formData.jobCompany}
                   onChange={handleInputChange}
                   placeholder="e.g., Google"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="theme-input"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium theme-accent-text mb-2">
                   Job Description *
                 </label>
                 <textarea
@@ -124,12 +123,12 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
                   required
                   rows={6}
                   placeholder="Paste the full job description here..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="theme-input resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium theme-accent-text mb-2">
                   Specific Requirements (Optional)
                 </label>
                 <textarea
@@ -138,12 +137,12 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
                   onChange={handleInputChange}
                   rows={3}
                   placeholder="Any specific skills or qualifications mentioned..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="theme-input resize-none"
                 />
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                <div className="bg-[rgba(231,111,81,0.12)] border border-[rgba(231,111,81,0.34)] text-[#ffd9d0] px-4 py-3 rounded-lg">
                   <p className="font-medium">Error</p>
                   <p className="text-sm">{error}</p>
                 </div>
@@ -153,7 +152,7 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="theme-button-secondary flex-1 disabled:opacity-60 text-white font-medium py-3 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <>
@@ -177,7 +176,7 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
                   type="button"
                   onClick={(e) => handleSubmit(e, true)}
                   disabled={loading}
-                  className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="theme-button-primary flex-1 disabled:opacity-60 font-medium py-3 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <>Processing...</>
@@ -197,44 +196,37 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
           {/* Results */}
           {result && (
             <div className="space-y-4">
-              {/* Match Score */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+              <div className="bg-[linear-gradient(135deg,rgba(42,157,143,0.18),rgba(233,196,106,0.16),rgba(244,162,97,0.18))] border border-[rgba(233,196,106,0.2)] rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-semibold text-gray-900">Match Score</h3>
+                  <h3 className="text-lg font-semibold text-white">Match Score</h3>
                   <span className={`text-3xl font-bold ${
-                    result.match_score >= 80 ? 'text-green-600' :
-                    result.match_score >= 60 ? 'text-yellow-600' :
-                    'text-red-600'
+                    result.match_score >= 80 ? 'theme-teal-text' :
+                    result.match_score >= 60 ? 'theme-accent-text' :
+                    'theme-warm-text'
                   }`}>
                     {result.match_score.toFixed(1)}%
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                <div className="w-full bg-[rgba(16,34,45,0.6)] rounded-full h-3 overflow-hidden">
                   <div
-                    className={`h-full transition-all duration-1000 ${
-                      result.match_score >= 80 ? 'bg-green-500' :
-                      result.match_score >= 60 ? 'bg-yellow-500' :
-                      'bg-red-500'
-                    }`}
+                    className="theme-score-bar h-full transition-all duration-1000"
                     style={{ width: `${result.match_score}%` }}
                   />
                 </div>
               </div>
 
-              {/* Customization Notes */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="theme-panel-soft rounded-2xl p-6">
+                <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                  <svg className="w-5 h-5 theme-accent-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                   Customization Notes
                 </h3>
-                <div className="prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap">
+                <div className="prose prose-sm max-w-none text-[rgba(248,243,231,0.78)] whitespace-pre-wrap">
                   {result.customization_notes}
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={() => {
@@ -246,13 +238,13 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
                       jobRequirements: ''
                     });
                   }}
-                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg transition-colors"
+                  className="theme-button-soft flex-1 font-medium py-3"
                 >
                   Try Another Job
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors"
+                  className="theme-button-primary flex-1 font-medium py-3"
                 >
                   Apply Changes
                 </button>

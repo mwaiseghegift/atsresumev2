@@ -5,12 +5,12 @@ import Navbar from "../components/Navbar";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-slate-900">
+      <body className="app-shell">
         <AuthProvider>
           <Navbar />
-          <div className={'content'}>
+          <main className="min-h-screen relative z-10">
             {children}
-          </div>
+          </main>
         </AuthProvider>
       </body>
     </html>

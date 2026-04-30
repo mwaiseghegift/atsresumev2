@@ -23,7 +23,7 @@ const WinPrint = () => {
   return (
     <button
       aria-label="Download Resume as PDF"
-      className="exclude-print fixed bottom-5 right-10 font-bold rounded-full bg-white text-fuchsia-600 shadow-lg border-2 border-white p-2 hover:bg-fuchsia-50 hover:scale-110 transition-all duration-200"
+      className="exclude-print theme-float-secondary fixed bottom-5 right-10 rounded-full p-2 font-bold"
       onClick={downloadPDF}
       title="Print / Save as PDF (Ctrl+P)"
     >

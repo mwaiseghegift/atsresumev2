@@ -33,10 +33,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700">
+    <div className="theme-auth-shell min-h-[calc(100vh-64px)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="theme-auth-card max-w-md w-full space-y-8 p-8 rounded-[1.75rem]">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Sign in to your account</h2>
+          <p className="theme-kicker text-center">Welcome Back</p>
+          <h2 className="theme-heading mt-4 text-center text-4xl font-extrabold text-white">Sign in to your account</h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
@@ -47,7 +48,7 @@ export default function LoginPage() {
                 name="username"
                 type="text"
                 required
-                className="appearance-none relative block w-full px-3 py-3 border border-slate-600 bg-slate-700/50 placeholder-slate-400 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-all"
+                className="theme-input appearance-none relative block sm:text-sm"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -60,7 +61,7 @@ export default function LoginPage() {
                 name="password"
                 type="password"
                 required
-                className="appearance-none relative block w-full px-3 py-3 border border-slate-600 bg-slate-700/50 placeholder-slate-400 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-all"
+                className="theme-input appearance-none relative block sm:text-sm"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -69,7 +70,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="text-red-400 text-sm text-center bg-red-400/10 py-2 rounded-lg border border-red-400/20">
+            <div className="text-[#ffd9d0] text-sm text-center bg-[rgba(231,111,81,0.12)] py-2 rounded-lg border border-[rgba(231,111,81,0.24)]">
               {error}
             </div>
           )}
@@ -78,15 +79,15 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-slate-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-blue-500/25"
+              className="theme-button-secondary group relative w-full flex justify-center py-3 px-4 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
           
-          <div className="text-center text-sm text-slate-400">
+          <div className="text-center text-sm theme-muted-text">
             Don't have an account?{' '}
-            <Link href="/register" className="font-medium text-blue-400 hover:text-blue-300">
+            <Link href="/register" className="font-medium theme-accent-text hover:text-white">
               Sign up
             </Link>
           </div>
