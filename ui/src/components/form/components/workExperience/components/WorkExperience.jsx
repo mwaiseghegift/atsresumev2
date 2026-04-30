@@ -86,7 +86,7 @@ const WorkExperience = ({workExperience, index}) => {
           removeWorkExperience(resumeData, setResumeData, index)
         }}
         aria-label="Remove"
-        className="p-2 h-fit rounded-lg border border-rose-500/30 bg-slate-800 hover:bg-rose-500/10 hover:border-rose-400/60 text-rose-400 hover:text-rose-300 text-base transition-all duration-200"
+        className="theme-button-danger p-2 h-fit text-base"
       >
         <BsTrash3/>
       </button>
