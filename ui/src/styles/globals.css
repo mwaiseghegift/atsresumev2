@@ -908,10 +908,85 @@ body {
 /* ===== BUILDER CHROME ===== */
 .builder-layout-container {
     display: flex; flex-direction: column;
-    height: calc(100vh - 64px);
+    height: 100vh; /* builder owns the full viewport — includes its own header */
     overflow: hidden;
 }
 
+/* ===== BUILDER HEADER (replaces global navbar on builder page) ===== */
+.builder-header {
+    height: 64px;
+    padding: 0 1.25rem;
+    display: flex; align-items: center; gap: 1rem;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E5E7EB;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    flex-shrink: 0;
+    z-index: 50;
+}
+
+.builder-brand {
+    display: flex; align-items: center; gap: 0.5rem; text-decoration: none; flex-shrink: 0;
+}
+.builder-brand-mark {
+    width: 2.25rem; height: 2.25rem; border-radius: 0.625rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8125rem; font-weight: 900; color: white; letter-spacing: -0.01em;
+    background: linear-gradient(135deg, #0D9488, #0F766E);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.builder-brand-text {
+    font-size: 1.125rem; font-weight: 700; letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #0D9488 0%, #14B8A6 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+.builder-nav-link {
+    padding: 0.375rem 0.75rem; border-radius: 0.375rem;
+    font-size: 0.875rem; font-weight: 500; color: #6B7280;
+    text-decoration: none; cursor: pointer; transition: all 140ms ease;
+    display: inline-block; border-bottom: 2px solid transparent;
+}
+.builder-nav-link:hover:not(.builder-nav-link-active) { background: #F3F4F6; color: #111827; }
+.builder-nav-link-active {
+    color: #0D9488; font-weight: 600;
+    border-bottom-color: #0D9488; border-radius: 0; padding-bottom: 0.2rem;
+}
+
+/* action buttons in builder header */
+.builder-action-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.375rem 0.75rem; border-radius: 0.5rem;
+    font-size: 0.8125rem; font-weight: 500; color: #374151;
+    background: transparent; border: 1px solid #E5E7EB; cursor: pointer;
+    transition: all 140ms ease; white-space: nowrap;
+}
+.builder-action-btn:hover { background: #F3F4F6; border-color: #D1D5DB; }
+.builder-action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* user avatar */
+.builder-avatar {
+    background: linear-gradient(135deg, #0D9488, #0F766E);
+    transition: opacity 140ms ease;
+}
+.builder-avatar:hover { opacity: 0.85; }
+
+/* Override WinPrint's theme-button-primary inside the builder header */
+.builder-header .theme-button-primary {
+    background: #0D9488 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+    border-radius: 0.5rem !important;
+    padding: 0.375rem 0.75rem !important;
+    font-size: 0.8125rem !important;
+    font-weight: 500 !important;
+}
+.builder-header .theme-button-primary:hover {
+    background: #0F766E !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* ===== BUILDER SUBBAR (kept for legacy, no longer used) ===== */
 .builder-subbar {
     display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
     padding: 0.5rem 1rem;
@@ -926,7 +1001,10 @@ body {
 .autosave-indicator.is-saved { color: #059669; }
 
 .builder-layout {
-    display: flex; flex: 1; overflow: hidden;
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0; /* prevent flex-item height blowout */
 }
 
 /* ===== SECTION NAV (left sidebar) ===== */
@@ -1065,6 +1143,8 @@ body {
 .light-editor .theme-button-danger { color: #EF4444; background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.22); }
 .light-editor .theme-button-ghost { color: #374151; background: transparent; border-color: #E5E7EB; }
 .light-editor .theme-button-ghost:hover { background: #F9FAFB; }
+.light-editor .theme-button-soft { color: #374151; background: #F3F4F6; border: 1px solid #E5E7EB; }
+.light-editor .theme-button-soft:hover { background: #E5E7EB; border-color: #D1D5DB; }
 .light-editor .theme-button-secondary { background: var(--color-teal); color: #FFFFFF; box-shadow: none; }
 .light-editor .theme-button-secondary:hover { background: var(--color-teal-dark); }
 .light-editor .theme-button-primary { background: var(--color-teal); color: #FFFFFF; box-shadow: none; }

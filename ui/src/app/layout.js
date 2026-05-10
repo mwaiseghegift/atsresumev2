@@ -1,13 +1,13 @@
 import "../styles/globals.css";
 import { AuthProvider } from "../context/AuthContext";
-import Navbar from "../components/Navbar";
+import ConditionalNavbar from "../components/ConditionalNavbar";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="app-shell">
+    <html lang="en" suppressHydrationWarning>
+      <body className="app-shell" suppressHydrationWarning>
         <AuthProvider>
-          <Navbar />
+          <ConditionalNavbar />
           <main className="relative z-10">
             {children}
           </main>

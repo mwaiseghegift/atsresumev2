@@ -1,6 +1,8 @@
 "use client";
 
 import React, { createContext, useState, useMemo } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Meta from "../components/meta/Meta";
 import Preview from "../components/preview/ui/Preview";
 import DefaultResumeData from "../components/utility/DefaultResumeData";
@@ -29,15 +31,15 @@ export const ResumeContext = createContext(DefaultResumeData);
 /* ─── completeness score ─── */
 function calcCompleteness(d) {
   let s = 0;
-  if (d.name)                           s += 15;
-  if (d.position)                       s += 5;
-  if (d.email)                          s += 10;
-  if (d.contactInformation)            s += 5;
-  if (d.summary)                        s += 15;
-  if (d.workExperience?.length > 0)    s += 20;
-  if (d.education?.length > 0)         s += 15;
-  if (d.skills?.length > 0)            s += 10;
-  if (d.socialMedia?.some(x => x.link)) s += 5;
+  if (d.name)                            s += 15;
+  if (d.position)                        s += 5;
+  if (d.email)                           s += 10;
+  if (d.contactInformation)             s += 5;
+  if (d.summary)                         s += 15;
+  if (d.workExperience?.length > 0)     s += 20;
+  if (d.education?.length > 0)          s += 15;
+  if (d.skills?.length > 0)             s += 10;
+  if (d.socialMedia?.some(x => x.link))  s += 5;
   return Math.min(s, 100);
 }
 
@@ -54,11 +56,11 @@ const SECTION_COMPONENTS = {
 };
 
 function SectionEditor({ section }) {
-  const Component = SECTION_COMPONENTS[section];
-  return Component ? <Component /> : null;
+  const Comp = SECTION_COMPONENTS[section];
+  return Comp ? <Comp /> : null;
 }
 
-/* ─── check icon ─── */
+/* ─── inline SVGs ─── */
 function CheckIcon() {
   return (
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -66,18 +68,138 @@ function CheckIcon() {
     </svg>
   );
 }
+function SparkleIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z" />
+      <path d="M19 3l.8 2.2L22 6l-2.2.8L19 9l-.8-2.2L16 6l2.2-.8z" />
+    </svg>
+  );
+}
+function SaveIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+      <polyline points="17 21 17 13 7 13 7 21" />
+      <polyline points="7 3 7 8 15 8" />
+    </svg>
+  );
+}
 
+/* ─── builder-specific top header ─── */
+function BuilderHeader({ user, isSaving, saveSuccess, onSave, onCustomize, onLogout }) {
+  const initials = user?.username?.slice(0, 2).toUpperCase() ?? '';
+
+  return (
+    /* Use Tailwind utilities directly so layout is guaranteed regardless of custom CSS loading */
+    <header
+      className="exclude-print flex flex-nowrap items-center gap-3 bg-white border-b border-gray-200 px-5"
+      style={{ height: '64px', flexShrink: 0, zIndex: 50 }}
+    >
+      {/* ── Brand ── */}
+      <Link href="/" className="flex items-center gap-2 shrink-0" style={{ textDecoration: 'none' }}>
+        <span
+          className="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-sm font-black text-white"
+          style={{ background: 'linear-gradient(135deg, #0D9488, #0F766E)' }}
+        >
+          AR
+        </span>
+        <span
+          className="hidden sm:block text-lg font-bold"
+          style={{
+            background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            letterSpacing: '-0.02em',
+          }}
+        >
+          ATSResume
+        </span>
+      </Link>
+
+      {/* Divider */}
+      <div className="w-px h-5 bg-gray-200 shrink-0" />
+
+      {/* ── Nav links ── */}
+      <nav className="flex items-center gap-0.5 shrink-0">
+        <span
+          className="px-3 text-sm font-semibold cursor-default"
+          style={{ color: '#0D9488', borderBottom: '2px solid #0D9488', paddingBottom: '0.2rem', paddingTop: '0.375rem' }}
+        >
+          Builder
+        </span>
+        {user && (
+          <Link href="/dashboard" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">
+            Resumes
+          </Link>
+        )}
+        <span className="px-3 py-1.5 text-sm font-medium text-gray-300 cursor-default">Job Tracker</span>
+        <span className="px-3 py-1.5 text-sm font-medium text-gray-300 cursor-default">Templates</span>
+      </nav>
+
+      {/* Spacer */}
+      <div className="flex-1 min-w-0" />
+
+      {/* ── Autosave status ── */}
+      {saveSuccess && (
+        <span className="flex items-center gap-1 text-sm font-medium text-green-600 shrink-0">
+          <CheckIcon /> Autosaved
+        </span>
+      )}
+      {isSaving && !saveSuccess && (
+        <span className="text-sm text-gray-400 shrink-0">Saving…</span>
+      )}
+
+      {/* ── Action buttons ── */}
+      <div className="flex items-center gap-2 shrink-0">
+        {user && (
+          <button onClick={onSave} disabled={isSaving} className="builder-action-btn">
+            <SaveIcon /> Save
+          </button>
+        )}
+        <button onClick={onCustomize} className="builder-action-btn">
+          <SparkleIcon /> Customize for Job
+        </button>
+        <Print compact />
+      </div>
+
+      {/* ── User avatar / auth ── */}
+      {user ? (
+        <button
+          onClick={onLogout}
+          className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-bold text-white"
+          style={{ background: 'linear-gradient(135deg, #0D9488, #0F766E)' }}
+          title={`${user.username} — click to logout`}
+        >
+          {initials}
+        </button>
+      ) : (
+        <div className="flex items-center gap-2 shrink-0">
+          <Link href="/login" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+            Log in
+          </Link>
+          <Link href="/register" className="btn-teal btn-teal-sm">Sign up</Link>
+        </div>
+      )}
+    </header>
+  );
+}
+
+/* ══════════════════════════════════════════
+   Main Builder
+   ══════════════════════════════════════════ */
 export default function Builder() {
-  const [resumeData, setResumeData] = useState(DefaultResumeData);
+  const [resumeData, setResumeData]     = useState(DefaultResumeData);
   const [activeSection, setActiveSection] = useState('personal');
-  const [aiPanelView, setAiPanelView] = useState(null); // null = use internal state
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveSuccess, setSaveSuccess] = useState(false);
-  const { user } = useAuth();
+  const [aiPanelView, setAiPanelView]   = useState(null);
+  const [isSaving, setIsSaving]         = useState(false);
+  const [saveSuccess, setSaveSuccess]   = useState(false);
+  const { user, logout }                = useAuth();
+  const router                          = useRouter();
 
-  const completeness = useMemo(() => calcCompleteness(resumeData), [resumeData]);
-
-  const activeSectionMeta = SECTIONS.find(s => s.id === activeSection);
+  const completeness       = useMemo(() => calcCompleteness(resumeData), [resumeData]);
+  const activeSectionMeta  = SECTIONS.find(s => s.id === activeSection);
 
   /* ─── save to dashboard ─── */
   const handleSaveDefault = async () => {
@@ -94,7 +216,7 @@ export default function Builder() {
       });
       if (res.ok) {
         setSaveSuccess(true);
-        setTimeout(() => setSaveSuccess(false), 4000);
+        setTimeout(() => setSaveSuccess(false), 5000);
       }
     } catch (e) {
       console.error(e);
@@ -108,16 +230,21 @@ export default function Builder() {
     const file = e.target.files[0];
     if (!(file instanceof Blob)) return;
     const reader = new FileReader();
-    reader.onload = (ev) => setResumeData(prev => ({ ...prev, profilePicture: ev.target.result }));
+    reader.onload = (ev) =>
+      setResumeData(prev => ({ ...prev, profilePicture: ev.target.result }));
     reader.readAsDataURL(file);
   };
 
   const handleChange = (e) =>
     setResumeData(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
-  /* ─── AI customization callback ─── */
-  const handleCustomized = (customizedData) => {
-    setResumeData(customizedData);
+  /* ─── AI callback — apply customised data to preview ─── */
+  const handleCustomized = (customizedData) => setResumeData(customizedData);
+
+  /* ─── logout ─── */
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
   };
 
   return (
@@ -129,51 +256,31 @@ export default function Builder() {
       />
 
       <div className="builder-layout-container">
-        {/* ── Sub-bar ── */}
-        <div className="builder-subbar exclude-print">
-          <div className="flex items-center gap-2">
-            {saveSuccess ? (
-              <span className="autosave-indicator is-saved"><CheckIcon /> Saved</span>
-            ) : isSaving ? (
-              <span className="autosave-indicator">Saving…</span>
-            ) : null}
-          </div>
-          <div className="flex items-center gap-2">
-            {user && (
-              <button
-                onClick={handleSaveDefault}
-                disabled={isSaving}
-                className="btn-outline btn-outline-sm"
-              >
-                Save
-              </button>
-            )}
-            <button
-              onClick={() => setAiPanelView('form')}
-              className="btn-teal btn-teal-sm"
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z" />
-              </svg>
-              Customize for Job
-            </button>
-            <Print compact />
-          </div>
-        </div>
 
-        {/* ── Main 4-column layout ── */}
+        {/* ── Full builder navbar ── */}
+        <BuilderHeader
+          user={user}
+          isSaving={isSaving}
+          saveSuccess={saveSuccess}
+          onSave={handleSaveDefault}
+          onCustomize={() => setAiPanelView('form')}
+          onLogout={handleLogout}
+        />
+
+        {/* ── 4-column workspace ── */}
         <div className="builder-layout">
-          {/* 1. Section nav */}
+
+          {/* 1 · Section navigation */}
           <SectionNav
             activeSection={activeSection}
             setActiveSection={setActiveSection}
             completeness={completeness}
           />
 
-          {/* 2. Section editor */}
+          {/* 2 · Section editor */}
           <div className="editor-panel light-editor">
             <div className="editor-panel-header">
-              <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center justify-between gap-2">
                 <div>
                   <h2 className="editor-panel-title">{activeSectionMeta?.label}</h2>
                   {activeSectionMeta?.desc && (
@@ -190,18 +297,19 @@ export default function Builder() {
             </div>
           </div>
 
-          {/* 3. Preview */}
+          {/* 3 · Resume preview */}
           <div className="preview-panel">
             <Preview />
           </div>
 
-          {/* 4. AI panel */}
+          {/* 4 · AI assistant */}
           <AIPanel
             resumeData={resumeData}
             onCustomized={handleCustomized}
             forceView={aiPanelView}
             setForceView={setAiPanelView}
           />
+
         </div>
       </div>
     </ResumeContext.Provider>
