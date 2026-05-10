@@ -8,7 +8,7 @@ export default function RootLayout({ children }) {
       <body className="app-shell">
         <AuthProvider>
           <Navbar />
-          <main className="min-h-screen relative z-10">
+          <main className="relative z-10">
             {children}
           </main>
         </AuthProvider>

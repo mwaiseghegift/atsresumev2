@@ -117,13 +117,18 @@ def customize_resume(request):
         )
         
         # Customize the resume using Gemini
-        customized_data, notes, match_score = gemini_service.customize_resume(
+        result = gemini_service.customize_resume(
             resume_data=data['resume_data'],
             job_description=data['job_description'],
             job_title=data['job_title'],
             job_requirements=data.get('job_requirements', '')
         )
-        
+        customized_data = result['customized_resume']
+        notes = result['customization_notes']
+        match_score = result['match_score']
+        keywords_analysis = result.get('keywords_analysis', {})
+        ai_suggestions = result.get('ai_suggestions', [])
+
         # Save the customized resume
         customized_resume = CustomizedResume.objects.create(
             original_resume=resume,
@@ -133,7 +138,7 @@ def customize_resume(request):
             match_score=match_score,
             user=user
         )
-        
+
         # Return the result
         return Response({
             'success': True,
@@ -142,7 +147,9 @@ def customize_resume(request):
             'job_description_id': job_description.id,
             'customized_data': customized_data,
             'customization_notes': notes,
-            'match_score': match_score
+            'match_score': match_score,
+            'keywords_analysis': keywords_analysis,
+            'ai_suggestions': ai_suggestions,
         }, status=status.HTTP_201_CREATED)
         
     except Exception as e:
@@ -172,19 +179,26 @@ def quick_customize(request):
         gemini_service = GeminiService()
         
         # Customize the resume using Gemini
-        customized_data, notes, match_score = gemini_service.customize_resume(
+        result = gemini_service.customize_resume(
             resume_data=data['resume_data'],
             job_description=data['job_description'],
             job_title=data['job_title'],
             job_requirements=data.get('job_requirements', '')
         )
-        
+        customized_data = result['customized_resume']
+        notes = result['customization_notes']
+        match_score = result['match_score']
+        keywords_analysis = result.get('keywords_analysis', {})
+        ai_suggestions = result.get('ai_suggestions', [])
+
         # Return the result without saving
         return Response({
             'success': True,
             'customized_data': customized_data,
             'customization_notes': notes,
-            'match_score': match_score
+            'match_score': match_score,
+            'keywords_analysis': keywords_analysis,
+            'ai_suggestions': ai_suggestions,
         }, status=status.HTTP_200_OK)
         
     except Exception as e:

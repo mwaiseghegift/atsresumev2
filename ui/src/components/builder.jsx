@@ -1,138 +1,209 @@
-"use client"
+"use client";
 
-import React, {createContext, useState} from "react";
+import React, { createContext, useState, useMemo } from "react";
 import Meta from "../components/meta/Meta";
-import FormCloseOpenBtn from "../components/FormCloseOpenBtn";
 import Preview from "../components/preview/ui/Preview";
 import DefaultResumeData from "../components/utility/DefaultResumeData";
-import JobCustomizer from "../components/JobCustomizer";
+import SectionNav, { SECTIONS } from "../components/SectionNav";
+import AIPanel from "../components/AIPanel";
 import dynamic from "next/dynamic";
-import Form from "../components/form/ui/Form";
 import { useAuth } from "../context/AuthContext";
 import { fetchCsrfToken } from "../components/utility/csrf";
 
-const ResumeContext = createContext(DefaultResumeData);
+// Section form components
+import PersonalInformation from "../components/form/components/PersonalInformation";
+import SocialMedias from "../components/form/components/socialMedia/ui/SocialMedias";
+import Summary from "../components/form/components/Summary";
+import Educations from "../components/form/components/education/ui/Educations";
+import WorkExperiences from "../components/form/components/workExperience/ui/WorkExperiences";
+import Projects from "../components/form/components/projects/ui/Projects";
+import Skills from "../components/form/components/skills/ui/Skills";
+import Languages from "../components/form/components/languages/ui/Languages";
+import TestsAndCertifications from "../components/form/components/testsAndCertifications/ui/TestsAndCertifications";
+import LoadUnload from "../components/form/components/LoadUnload";
 
-// Export the context so it can be used in other components
-export { ResumeContext };
+const Print = dynamic(() => import("../components/utility/WinPrint"), { ssr: false });
 
-// server side rendering false
-const Print = dynamic(() => import("../components/utility/WinPrint"), {
-  ssr: false,
-});
+export const ResumeContext = createContext(DefaultResumeData);
+
+/* ─── completeness score ─── */
+function calcCompleteness(d) {
+  let s = 0;
+  if (d.name)                           s += 15;
+  if (d.position)                       s += 5;
+  if (d.email)                          s += 10;
+  if (d.contactInformation)            s += 5;
+  if (d.summary)                        s += 15;
+  if (d.workExperience?.length > 0)    s += 20;
+  if (d.education?.length > 0)         s += 15;
+  if (d.skills?.length > 0)            s += 10;
+  if (d.socialMedia?.some(x => x.link)) s += 5;
+  return Math.min(s, 100);
+}
+
+/* ─── section → component map ─── */
+const SECTION_COMPONENTS = {
+  personal:       () => <><PersonalInformation /><SocialMedias /></>,
+  summary:        Summary,
+  experience:     WorkExperiences,
+  education:      Educations,
+  skills:         Skills,
+  projects:       Projects,
+  certifications: TestsAndCertifications,
+  languages:      Languages,
+};
+
+function SectionEditor({ section }) {
+  const Component = SECTION_COMPONENTS[section];
+  return Component ? <Component /> : null;
+}
+
+/* ─── check icon ─── */
+function CheckIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
 
 export default function Builder() {
-  // resume data
   const [resumeData, setResumeData] = useState(DefaultResumeData);
-
-  // form hide/show
-  const [formClose, setFormClose] = useState(false);
-
-  // auth
-  const { user } = useAuth();
+  const [activeSection, setActiveSection] = useState('personal');
+  const [aiPanelView, setAiPanelView] = useState(null); // null = use internal state
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const { user } = useAuth();
 
+  const completeness = useMemo(() => calcCompleteness(resumeData), [resumeData]);
+
+  const activeSectionMeta = SECTIONS.find(s => s.id === activeSection);
+
+  /* ─── save to dashboard ─── */
   const handleSaveDefault = async () => {
+    if (!user) return;
     setIsSaving(true);
     setSaveSuccess(false);
     try {
-       const csrfToken = await fetchCsrfToken();
-       const res = await fetch('http://localhost:8000/api/resumes/', {
-          method: 'POST',
-          headers: { 
-              'Content-Type': 'application/json',
-              'X-CSRFToken': csrfToken
-          },
-          body: JSON.stringify({ resume_data: resumeData }),
-          credentials: 'include'
-       });
-       if(res.ok) setSaveSuccess(true);
-       setTimeout(() => setSaveSuccess(false), 3000);
+      const csrfToken = await fetchCsrfToken();
+      const res = await fetch('http://localhost:8000/api/resumes/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+        body: JSON.stringify({ resume_data: resumeData }),
+        credentials: 'include',
+      });
+      if (res.ok) {
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 4000);
+      }
     } catch (e) {
-       console.error(e);
+      console.error(e);
     } finally {
-       setIsSaving(false);
+      setIsSaving(false);
     }
   };
 
-  // profile picture
+  /* ─── profile picture ─── */
   const handleProfilePicture = (e) => {
     const file = e.target.files[0];
-
-    if (file instanceof Blob) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setResumeData({...resumeData, profilePicture: event.target.result});
-      };
-      reader.readAsDataURL(file);
-    } else {
-      console.error("Invalid file type");
-    }
+    if (!(file instanceof Blob)) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => setResumeData(prev => ({ ...prev, profilePicture: ev.target.result }));
+    reader.readAsDataURL(file);
   };
 
-  const handleChange = (e) => {
-    setResumeData({...resumeData, [e.target.name]: e.target.value});
-    console.log(resumeData);
-  };
+  const handleChange = (e) =>
+    setResumeData(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
-  // Handle customized resume data from JobCustomizer
-  const handleCustomized = (customizedData, matchScore) => {
+  /* ─── AI customization callback ─── */
+  const handleCustomized = (customizedData) => {
     setResumeData(customizedData);
-    console.log("Resume customized with match score:", matchScore);
   };
 
   return (
-    <>
-      <ResumeContext.Provider
-        value={{
-          resumeData,
-          setResumeData,
-          handleProfilePicture,
-          handleChange,
-        }}
-      >
-        <Meta
-          title="ATSResume | Get hired with an ATS-optimized resume"
-          description="ATSResume is a cutting-edge resume builder that helps job seekers create a professional, ATS-friendly resume in minutes. Our platform uses the latest technology to analyze and optimize your resume for maximum visibility and success with applicant tracking systems. Say goodbye to frustration and wasted time spent on manual resume formatting. Create your winning resume with ATSResume today and get noticed by employers."
-          keywords="ATS-friendly, Resume optimization, Keyword-rich resume, Applicant Tracking System, ATS resume builder, ATS resume templates, ATS-compliant resume, ATS-optimized CV, ATS-friendly format, ATS resume tips, Resume writing services, Career guidance, Job search in India, Resume tips for India, Professional resume builder, Cover letter writing, Interview preparation, Job interview tips, Career growth, Online job applications, resume builder, free resume builder, resume ats, best free resume builder, resume creator, resume cv, resume design, resume editor, resume maker"
-        />
-        <div className="builder-shell">
-          <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 min-h-[calc(100vh-7rem)]">
-            {!formClose && (
-              <div className="editor-pane xl:col-span-4 min-h-0">
-                <Form
-                  user={user}
-                  onSaveDefault={handleSaveDefault}
-                  isSaving={isSaving}
-                  saveSuccess={saveSuccess}
-                  formClose={formClose}
-                  setFormClose={setFormClose}
-                />
-              </div>
+    <ResumeContext.Provider value={{ resumeData, setResumeData, handleProfilePicture, handleChange }}>
+      <Meta
+        title="ATSResume | Build & optimise your ATS resume"
+        description="AI-powered resume builder that optimises your resume for Applicant Tracking Systems."
+        keywords="ATS resume builder, AI resume, resume optimiser"
+      />
+
+      <div className="builder-layout-container">
+        {/* ── Sub-bar ── */}
+        <div className="builder-subbar exclude-print">
+          <div className="flex items-center gap-2">
+            {saveSuccess ? (
+              <span className="autosave-indicator is-saved"><CheckIcon /> Saved</span>
+            ) : isSaving ? (
+              <span className="autosave-indicator">Saving…</span>
+            ) : null}
+          </div>
+          <div className="flex items-center gap-2">
+            {user && (
+              <button
+                onClick={handleSaveDefault}
+                disabled={isSaving}
+                className="btn-outline btn-outline-sm"
+              >
+                Save
+              </button>
             )}
-            <div className={`preview-pane min-h-0 ${formClose ? 'xl:col-span-12' : 'xl:col-span-8'}`}>
-              <div className="preview-frame h-full flex flex-col">
-                <div className="preview-toolbar">
-                  <div className="preview-toolbar-grid">
-                    <div>
-                      <p className="theme-kicker">Preview</p>
-                      <h2 className="preview-title">Production-ready document</h2>
-                      <p className="preview-subtitle">Review the printable layout, tailor it to a role, and export without leaving the workspace.</p>
-                    </div>
-                    <div className="editor-actions">
-                      <FormCloseOpenBtn formClose={formClose} setFormClose={setFormClose} compact />
-                      <JobCustomizer resumeData={resumeData} onCustomized={handleCustomized} compact />
-                      <Print compact />
-                    </div>
-                  </div>
-                </div>
-                <Preview />
-              </div>
-            </div>
+            <button
+              onClick={() => setAiPanelView('form')}
+              className="btn-teal btn-teal-sm"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z" />
+              </svg>
+              Customize for Job
+            </button>
+            <Print compact />
           </div>
         </div>
-      </ResumeContext.Provider>
-    </>
+
+        {/* ── Main 4-column layout ── */}
+        <div className="builder-layout">
+          {/* 1. Section nav */}
+          <SectionNav
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
+            completeness={completeness}
+          />
+
+          {/* 2. Section editor */}
+          <div className="editor-panel light-editor">
+            <div className="editor-panel-header">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <h2 className="editor-panel-title">{activeSectionMeta?.label}</h2>
+                  {activeSectionMeta?.desc && (
+                    <p className="editor-panel-desc">{activeSectionMeta.desc}</p>
+                  )}
+                </div>
+                <div className="shrink-0">
+                  <LoadUnload compact />
+                </div>
+              </div>
+            </div>
+            <div className="editor-panel-scroll">
+              <SectionEditor section={activeSection} />
+            </div>
+          </div>
+
+          {/* 3. Preview */}
+          <div className="preview-panel">
+            <Preview />
+          </div>
+
+          {/* 4. AI panel */}
+          <AIPanel
+            resumeData={resumeData}
+            onCustomized={handleCustomized}
+            forceView={aiPanelView}
+            setForceView={setAiPanelView}
+          />
+        </div>
+      </div>
+    </ResumeContext.Provider>
   );
 }

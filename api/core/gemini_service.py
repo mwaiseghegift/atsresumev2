@@ -124,7 +124,18 @@ Your task is to customize and optimize a resume for a specific job posting. Anal
     // }}
   }},
   "customization_notes": "Detailed explanation of the customizations made and strategic recommendations",
-  "match_score": 85,  // Number between 0-100
+  "match_score": 85,
+  "keywords_analysis": {{
+    "matched": ["keyword1", "keyword2"],
+    "missing": ["keyword3", "keyword4"],
+    "weak": ["keyword5"]
+  }},
+  "ai_suggestions": [
+    {{"title": "Improve summary", "description": "Add relevant keywords to summary"}},
+    {{"title": "Enhance experience bullets", "description": "Quantify achievements with metrics"}},
+    {{"title": "Add missing skills", "description": "Add listed missing skills to your skills section"}},
+    {{"title": "Highlight achievements", "description": "Lead with quantified results in each role"}}
+  ],
   "key_alignments": ["list", "of", "key", "strengths", "that", "match"],
   "suggested_improvements": ["list", "of", "areas", "to", "improve"]
 }}
@@ -154,24 +165,32 @@ Please respond ONLY with valid JSON matching the format above."""
             customized_resume = result.get('customized_resume', {})
             customization_notes = result.get('customization_notes', '')
             match_score = float(result.get('match_score', 0))
-            
+            keywords_analysis = result.get('keywords_analysis', {'matched': [], 'missing': [], 'weak': []})
+            ai_suggestions = result.get('ai_suggestions', [])
+
             # Normalize the resume structure to ensure consistency
             customized_resume = self._normalize_resume_structure(customized_resume)
-            
+
             # Clean markdown formatting from all text fields
             customized_resume = self._clean_markdown_formatting(customized_resume)
-            
+
             # Add additional insights to notes
             key_alignments = result.get('key_alignments', [])
             suggested_improvements = result.get('suggested_improvements', [])
-            
+
             if key_alignments or suggested_improvements:
-                customization_notes += "\n\n**Key Alignments:**\n"
+                customization_notes += "\n\nKey Alignments:\n"
                 customization_notes += "\n".join(f"- {item}" for item in key_alignments)
-                customization_notes += "\n\n**Suggested Improvements:**\n"
+                customization_notes += "\n\nSuggested Improvements:\n"
                 customization_notes += "\n".join(f"- {item}" for item in suggested_improvements)
-            
-            return customized_resume, customization_notes, match_score
+
+            return {
+                'customized_resume': customized_resume,
+                'customization_notes': customization_notes,
+                'match_score': match_score,
+                'keywords_analysis': keywords_analysis,
+                'ai_suggestions': ai_suggestions,
+            }
             
         except json.JSONDecodeError as e:
             # If JSON parsing fails, try to extract information manually
@@ -246,7 +265,7 @@ Please respond ONLY with valid JSON matching the format above."""
         results = []
         for job in job_descriptions:
             try:
-                _, notes, score = self.customize_resume(
+                result = self.customize_resume(
                     resume_data,
                     job.get('description', ''),
                     job.get('title', ''),
@@ -255,8 +274,8 @@ Please respond ONLY with valid JSON matching the format above."""
                 results.append({
                     'job_id': job.get('id'),
                     'job_title': job.get('title'),
-                    'match_score': score,
-                    'analysis': notes
+                    'match_score': result['match_score'],
+                    'analysis': result['customization_notes'],
                 })
             except Exception as e:
                 results.append({
