@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import {ResumeContext} from "../../builder";
+import DocumentSection from "../../ui/DocumentSection";
 
 const Skills = ({ title, skills }) => {
   const { resumeData, setResumeData } = useContext(ResumeContext);
@@ -12,12 +13,9 @@ const Skills = ({ title, skills }) => {
 
   return (
     skills && skills.length > 0 && (
-      <>
-        <h2 className="section-title mb-1.5 border-b-2 border-gray-300 editable" contentEditable suppressContentEditableWarning onBlur={handleTitleChange}>
-          {title}
-        </h2>
+      <DocumentSection title={title} editable onBlur={handleTitleChange}>
         <p className="sub-content leading-relaxed">{skills.join(", ")}</p>
-      </>
+      </DocumentSection>
     )
   );
 };

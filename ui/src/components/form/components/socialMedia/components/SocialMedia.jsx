@@ -1,17 +1,14 @@
 import React, {useContext} from 'react';
 import {handleSocialMedia} from "../units/handleSocialMedia";
 import {ResumeContext} from "../../../../builder";
-import {removeLanguage} from "../../languages/utils/removeLanguage";
 import {BsTrash3} from "react-icons/bs";
 import {removeSocialMedia} from "../units/removeSocialMedia";
 
 const SocialMedia = ({socialMedia, index}) => {
   const {resumeData, setResumeData} = useContext(ResumeContext);
   return (
-    <div className="flex w-fill gap-5 items-top">
-      <div
-        className="flex-wrap-gap-2"
-      >
+    <div className="editor-row">
+      <div className="editor-row-fields editor-grid-2-tight">
         <input
           type="text"
           placeholder="Social Media"
@@ -29,6 +26,7 @@ const SocialMedia = ({socialMedia, index}) => {
           onChange={(e) => handleSocialMedia(resumeData, setResumeData, e, index)}
         />
       </div>
+      <div className="editor-row-action">
       <button
         type="button"
         onClick={() => {
@@ -39,6 +37,7 @@ const SocialMedia = ({socialMedia, index}) => {
       >
         <BsTrash3/>
       </button>
+      </div>
     </div>
   );
 };

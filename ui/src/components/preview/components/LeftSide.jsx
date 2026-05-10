@@ -3,6 +3,7 @@ import DateRange from "../../utility/DateRange";
 import Language from "../components/Language";
 import Certification from "../components/Certification";
 import dynamic from "next/dynamic";
+import DocumentSection from "../../ui/DocumentSection";
 
 const Droppable = dynamic(
   () => import("@hello-pangea/dnd").then((mod) => mod.Droppable),
@@ -15,25 +16,19 @@ const Draggable = dynamic(
 
 const LeftSide = ({ resumeData }) => {
   return (
-    <div className="col-span-1 space-y-3">
+    <div className="space-y-1.5">
       {resumeData.summary.length > 0 && (
-        <div className="mb-2">
-          <h2 className="section-title mb-1.5 border-b-2 border-gray-300">
-            Summary
-          </h2>
+        <DocumentSection title="Summary">
           <p className="content wrap-break-word leading-relaxed">{resumeData.summary}</p>
-        </div>
+        </DocumentSection>
       )}
 
       {resumeData.education.length > 0 && (
-        <div className="mb-2">
-          <h2 className="section-title mb-1.5 border-b-2 border-gray-300">
-            Education
-          </h2>
+        <DocumentSection title="Education">
           {resumeData.education.map((item, index) => (
-            <div key={index} className="mb-2">
-              <p className="content i-bold">{item.degree}</p>
-              <p className="content">{item.school}</p>
+            <div key={index} className="document-item">
+              <p className="document-item-title">{item.degree}</p>
+              <p className="document-item-subtitle">{item.school}</p>
               <DateRange
                 startYear={item.startYear}
                 endYear={item.endYear}
@@ -41,7 +36,7 @@ const LeftSide = ({ resumeData }) => {
               />
             </div>
           ))}
-        </div>
+        </DocumentSection>
       )}
 
       <Droppable droppableId="skills" type="SKILLS">
@@ -58,7 +53,7 @@ const LeftSide = ({ resumeData }) => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={`mb-2 ${
+                    className={`mb-1 ${
                       snapshot.isDragging &&
                       "outline-dashed outline-2 outline-gray-400 bg-white"
                     }`}

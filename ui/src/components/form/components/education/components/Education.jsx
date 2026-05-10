@@ -8,12 +8,8 @@ const Education = ({education, index}) => {
   const {resumeData, setResumeData} = useContext(ResumeContext);
 
   return (
-    <div
-      className="flex w-fill gap-5 items-top"
-    >
-      <div
-        className="flex-1"
-      >
+    <div className="editor-row">
+      <div className="editor-row-fields editor-grid-2-tight">
         <input
           type="text"
           placeholder="School"
@@ -34,7 +30,7 @@ const Education = ({education, index}) => {
             handleEducation(resumeData, setResumeData, e, index)
           }
         />
-        <div className="flex-wrap-gap-2">
+        <div className="editor-grid-2-tight editor-field-span-2">
           <input
             type="date"
             placeholder="Start Year"
@@ -57,6 +53,7 @@ const Education = ({education, index}) => {
           />
         </div>
       </div>
+      <div className="editor-row-action">
       <button
         type="button"
         onClick={() => {
@@ -67,6 +64,7 @@ const Education = ({education, index}) => {
       >
         <BsTrash3/>
       </button>
+      </div>
     </div>
   );
 };

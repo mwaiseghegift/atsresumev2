@@ -3,6 +3,7 @@ import {ResumeContext} from "../../../../builder";
 import WorkExperience from "../components/WorkExperience";
 import {MdAddCircle} from "react-icons/md";
 import {addWorkExperience} from "../units/addWorkExperience";
+import EditorSection from "../../../../ui/EditorSection";
 
 const WorkExperiences = () => {
   const {
@@ -11,8 +12,21 @@ const WorkExperiences = () => {
   } = useContext(ResumeContext);
 
   return (
-    <div className="flex-col-gap-2">
-      <h2 className="input-title">Work Experience</h2>
+    <EditorSection
+      title="Work experience"
+      description="Use strong verbs, measurable outcomes, and concise achievements."
+      actions={(
+        <button type="button"
+                onClick={() => {
+                  addWorkExperience(resumeData, setResumeData)
+                }}
+                aria-label="Add"
+                className="theme-button-secondary inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
+          <MdAddCircle className="text-base"/>
+          Add Role
+        </button>
+      )}
+    >
       {resumeData.workExperience.map((workExperience, index) => (
         <WorkExperience
           key={index}
@@ -20,17 +34,7 @@ const WorkExperiences = () => {
           index={index}
         />
       ))}
-      <button type="button"
-              onClick={() => {
-                // TODO add index
-                addWorkExperience(resumeData, setResumeData)
-              }}
-              aria-label="Add"
-              className="theme-button-secondary inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
-        <MdAddCircle className="text-base"/>
-        Add
-      </button>
-    </div>
+    </EditorSection>
   );
 };
 

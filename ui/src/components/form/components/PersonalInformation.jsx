@@ -1,14 +1,17 @@
 import React, {useContext} from "react";
 import {ResumeContext} from "../../builder";
+import EditorSection from "../../ui/EditorSection";
 
 const PersonalInformation = ({}) => {
   const {resumeData, setResumeData, handleProfilePicture, handleChange} =
     useContext(ResumeContext);
 
   return (
-    <div className="flex-col-gap-2">
-      <h2 className="input-title">Personal Information</h2>
-      <div className="grid-4">
+    <EditorSection
+      title="Personal information"
+      description="Core identity and contact details used across the document."
+    >
+      <div className="editor-grid-2">
         <input
           type="text"
           placeholder="Full Name"
@@ -55,12 +58,12 @@ const PersonalInformation = ({}) => {
           type="file"
           name="profileImage"
           accept="image/*"
-          className="profileInput"
+          className="profileInput editor-field-span-2"
           onChange={handleProfilePicture}
           placeholder="Profile Picture"
         />
       </div>
-    </div>
+    </EditorSection>
   );
 };
 

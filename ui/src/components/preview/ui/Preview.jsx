@@ -32,18 +32,20 @@ const Preview = () => {
   ];
 
   return (
-    <div className="theme-preview-pane md:max-w-[60%] sticky top-0 preview rm-padding-print px-6 py-4 overflow-x-auto md:overflow-y-scroll md:h-screen flex items-start justify-center rounded-[1.75rem] md:rounded-none md:rounded-r-[1.75rem] shadow-2xl shadow-black/10">
-      <A4PageWrapper>
-        <ModalHighlightMenu/>
-        <DragDropContext onDragEnd={onDragEndHandler}>
-          <Header resumeData={resumeData} icons={icons}/>
-          <hr className="border-dashed my-3"/>
-          <div className="grid grid-cols-3 gap-5">
-            <LeftSide resumeData={resumeData}/>
-            <RightSide resumeData={resumeData}/>
-          </div>
-        </DragDropContext>
-      </A4PageWrapper>
+    <div className="preview-scroll preview rm-padding-print overflow-x-auto md:overflow-y-auto md:h-[calc(100vh-15rem)]">
+      <div className="document-stage">
+        <A4PageWrapper>
+          <ModalHighlightMenu/>
+          <DragDropContext onDragEnd={onDragEndHandler}>
+            <Header resumeData={resumeData} icons={icons}/>
+            <hr className="border-dashed my-4 border-[rgba(38,70,83,0.18)]"/>
+            <div className="document-grid">
+              <LeftSide resumeData={resumeData}/>
+              <RightSide resumeData={resumeData}/>
+            </div>
+          </DragDropContext>
+        </A4PageWrapper>
+      </div>
     </div>
   );
 };

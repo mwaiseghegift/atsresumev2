@@ -97,27 +97,41 @@ export default function Builder() {
           description="ATSResume is a cutting-edge resume builder that helps job seekers create a professional, ATS-friendly resume in minutes. Our platform uses the latest technology to analyze and optimize your resume for maximum visibility and success with applicant tracking systems. Say goodbye to frustration and wasted time spent on manual resume formatting. Create your winning resume with ATSResume today and get noticed by employers."
           keywords="ATS-friendly, Resume optimization, Keyword-rich resume, Applicant Tracking System, ATS resume builder, ATS resume templates, ATS-compliant resume, ATS-optimized CV, ATS-friendly format, ATS resume tips, Resume writing services, Career guidance, Job search in India, Resume tips for India, Professional resume builder, Cover letter writing, Interview preparation, Job interview tips, Career growth, Online job applications, resume builder, free resume builder, resume ats, best free resume builder, resume creator, resume cv, resume design, resume editor, resume maker"
         />
-        <div className="f-col gap-4 md:flex-row justify-evenly max-w-7xl md:mx-auto md:h-screen px-4 md:px-0 pb-6 md:pb-0">
-          {!formClose && (
-            <Form/>
-          )}
-          <Preview/>
+        <div className="builder-shell">
+          <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 min-h-[calc(100vh-7rem)]">
+            {!formClose && (
+              <div className="editor-pane xl:col-span-4 min-h-0">
+                <Form
+                  user={user}
+                  onSaveDefault={handleSaveDefault}
+                  isSaving={isSaving}
+                  saveSuccess={saveSuccess}
+                  formClose={formClose}
+                  setFormClose={setFormClose}
+                />
+              </div>
+            )}
+            <div className={`preview-pane min-h-0 ${formClose ? 'xl:col-span-12' : 'xl:col-span-8'}`}>
+              <div className="preview-frame h-full flex flex-col">
+                <div className="preview-toolbar">
+                  <div className="preview-toolbar-grid">
+                    <div>
+                      <p className="theme-kicker">Preview</p>
+                      <h2 className="preview-title">Production-ready document</h2>
+                      <p className="preview-subtitle">Review the printable layout, tailor it to a role, and export without leaving the workspace.</p>
+                    </div>
+                    <div className="editor-actions">
+                      <FormCloseOpenBtn formClose={formClose} setFormClose={setFormClose} compact />
+                      <JobCustomizer resumeData={resumeData} onCustomized={handleCustomized} compact />
+                      <Print compact />
+                    </div>
+                  </div>
+                </div>
+                <Preview />
+              </div>
+            </div>
+          </div>
         </div>
-        <FormCloseOpenBtn formClose={formClose} setFormClose={setFormClose}/>
-        {user && (
-           <button 
-             onClick={handleSaveDefault}
-             disabled={isSaving}
-             className="exclude-print theme-float-primary fixed top-24 right-8 flex items-center gap-2 rounded-full px-4 py-2 z-40 disabled:opacity-50"
-           >
-             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-             </svg>
-             {isSaving ? 'Saving...' : saveSuccess ? 'Saved!' : 'Save Default CV'}
-           </button>
-        )}
-        <Print/>
-        <JobCustomizer resumeData={resumeData} onCustomized={handleCustomized}/>
       </ResumeContext.Provider>
     </>
   );

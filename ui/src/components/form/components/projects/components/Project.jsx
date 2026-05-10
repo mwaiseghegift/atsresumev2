@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {handleProject} from "../utils/handleProject";
 import {ResumeContext} from "../../../../builder";
-import {removeLanguage} from "../../languages/utils/removeLanguage";
 import {BsTrash3} from "react-icons/bs";
 import {removeProject} from "../utils/removeProject";
 
@@ -12,13 +11,8 @@ const Project = ({project, index}) => {
   // TODO change the "end year" to the "end date" for clarity  (also in the name of variable)
 
   return (
-    <div
-      className="flex w-fill gap-5 items-top"
-    >
-      <div
-        className="flex-1"
-      >
-        {/* Project name */}
+    <div className="editor-row">
+      <div className="editor-row-fields editor-grid-2-tight">
         <input
           type="text"
           placeholder="Project Name"
@@ -27,7 +21,6 @@ const Project = ({project, index}) => {
           value={project.name || ''}
           onChange={(e) => handleProject(resumeData, setResumeData, e, index)}
         />
-        {/* Link */}
         <input
           type="text"
           placeholder="Link"
@@ -36,27 +29,24 @@ const Project = ({project, index}) => {
           value={project.link || ''}
           onChange={(e) => handleProject(resumeData, setResumeData, e, index)}
         />
-        {/* Description */}
         <textarea
           type="text"
           placeholder="Description"
           name="description"
-          className="w-full other-input h-32"
+          className="w-full other-input h-32 editor-field-span-2"
           value={project.description || ''}
           maxLength="250"
           onChange={(e) => handleProject(resumeData, setResumeData, e, index)}
         />
-        {/* Key achievements */}
         <textarea
           type="text"
           placeholder="Key Achievements"
           name="keyAchievements"
-          className="w-full other-input h-40"
+          className="w-full other-input h-40 editor-field-span-2"
           value={project.keyAchievements || ''}
           onChange={(e) => handleProject(resumeData, setResumeData, e, index)}
         />
-        {/* Start date */}
-        <div className="flex-wrap-gap-2">
+        <div className="editor-grid-2-tight editor-field-span-2">
           <input
             type="date"
             placeholder="Start Year"
@@ -65,7 +55,6 @@ const Project = ({project, index}) => {
             value={project.startYear || ''}
             onChange={(e) => handleProject(resumeData, setResumeData, e, index)}
           />
-          {/* End data */}
           <input
             type="date"
             placeholder="End Year"
@@ -76,6 +65,7 @@ const Project = ({project, index}) => {
           />
         </div>
       </div>
+      <div className="editor-row-action">
       <button
         type="button"
         onClick={() => {
@@ -86,6 +76,7 @@ const Project = ({project, index}) => {
       >
         <BsTrash3/>
       </button>
+      </div>
     </div>
   );
 };

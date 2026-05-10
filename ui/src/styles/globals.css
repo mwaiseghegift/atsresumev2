@@ -378,6 +378,282 @@
     box-shadow: 0 14px 30px rgba(233, 111, 81, 0.12);
 }
 
+.builder-shell {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 2rem;
+}
+
+.editor-pane,
+.preview-pane {
+    min-height: 0;
+}
+
+.editor-frame,
+.preview-frame {
+    border-radius: 1.75rem;
+    overflow: hidden;
+}
+
+.editor-frame {
+    background: linear-gradient(180deg, rgba(16, 34, 45, 0.96) 0%, rgba(19, 47, 59, 0.97) 100%);
+    border: 1px solid rgba(233, 196, 106, 0.12);
+    box-shadow: 0 28px 70px rgba(3, 11, 16, 0.24);
+}
+
+.preview-frame {
+    background: linear-gradient(180deg, rgba(24, 55, 68, 0.78) 0%, rgba(16, 34, 45, 0.84) 100%);
+    border: 1px solid rgba(42, 157, 143, 0.14);
+    box-shadow: 0 28px 70px rgba(3, 11, 16, 0.22);
+}
+
+.editor-toolbar,
+.preview-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 1.5rem;
+    backdrop-filter: blur(16px);
+}
+
+.editor-toolbar {
+    background: linear-gradient(180deg, rgba(16, 34, 45, 0.96) 0%, rgba(16, 34, 45, 0.84) 100%);
+    border-bottom: 1px solid rgba(233, 196, 106, 0.1);
+}
+
+.preview-toolbar {
+    background: linear-gradient(180deg, rgba(24, 55, 68, 0.92) 0%, rgba(24, 55, 68, 0.72) 100%);
+    border-bottom: 1px solid rgba(42, 157, 143, 0.12);
+}
+
+.editor-toolbar-grid,
+.preview-toolbar-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.editor-title,
+.preview-title {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: white;
+}
+
+.editor-subtitle,
+.preview-subtitle {
+    margin-top: 0.35rem;
+    font-size: 0.92rem;
+    color: rgba(248, 243, 231, 0.68);
+}
+
+.editor-scroll {
+    padding: 0 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.editor-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    background: rgba(12, 29, 39, 0.32);
+    border: 1px solid rgba(233, 196, 106, 0.08);
+}
+
+.editor-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.editor-section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: white;
+}
+
+.editor-section-note {
+    margin-top: 0.25rem;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: rgba(248, 243, 231, 0.58);
+}
+
+.editor-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.editor-grid-2-tight {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.editor-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.875rem;
+    align-items: start;
+    padding: 1rem;
+    border-radius: 1.25rem;
+    background: rgba(248, 243, 231, 0.03);
+    border: 1px solid rgba(233, 196, 106, 0.08);
+}
+
+.editor-row-fields {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.editor-field-span-2 {
+    grid-column: 1 / -1;
+}
+
+.editor-row-action {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+}
+
+.editor-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.theme-button-ghost {
+    color: rgba(248, 243, 231, 0.82);
+    background: transparent;
+    border: 1px solid rgba(233, 196, 106, 0.14);
+    border-radius: 1rem;
+    font-weight: 700;
+}
+
+.theme-button-ghost:hover {
+    background: rgba(248, 243, 231, 0.06);
+    border-color: rgba(233, 196, 106, 0.28);
+}
+
+.preview-scroll {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.document-stage {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.document-shell {
+    width: 8.5in;
+    min-height: 11.7in;
+    background: #fffdfa;
+    color: #1b2430;
+    border: 1px solid rgba(38, 70, 83, 0.08);
+    box-shadow: 0 32px 70px rgba(9, 22, 30, 0.16);
+    padding: 2.25rem 2.1rem;
+}
+
+.document-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.6fr);
+    gap: 1.75rem;
+}
+
+.document-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.15rem;
+}
+
+.document-section-title {
+    margin: 0;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid rgba(38, 70, 83, 0.18);
+    font-size: 0.78rem;
+    line-height: 1.3;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #264653;
+}
+
+.document-section-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.document-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.document-item-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.document-item-title {
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #1d2a35;
+}
+
+.document-item-subtitle {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #355261;
+}
+
+.document-meta {
+    font-size: 0.72rem;
+    color: #4a6270;
+    white-space: nowrap;
+}
+
+.document-link {
+    color: #2A9D8F;
+    word-break: break-all;
+}
+
+.document-list {
+    margin: 0;
+    padding-inline-start: 1rem;
+    display: grid;
+    gap: 0.25rem;
+}
+
+@media (min-width: 900px) {
+    .builder-shell {
+        padding: 1.75rem 1.5rem 2.5rem;
+    }
+
+    .editor-grid-2,
+    .editor-grid-2-tight {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 .name{
     font-size: 22px;
     font-weight: 700;

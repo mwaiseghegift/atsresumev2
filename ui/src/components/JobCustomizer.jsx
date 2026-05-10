@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { customizeResume } from '../services/customizeService';
 
-export default function JobCustomizer({ resumeData, onCustomized }) {
+export default function JobCustomizer({ resumeData, onCustomized, triggerClassName = '', compact = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -51,12 +51,14 @@ export default function JobCustomizer({ resumeData, onCustomized }) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="exclude-print theme-float-secondary fixed bottom-24 right-8 flex items-center gap-2 px-6 py-3 rounded-full z-40"
+        className={compact
+          ? `theme-button-secondary inline-flex items-center gap-2 px-4 py-2.5 text-sm ${triggerClassName}`.trim()
+          : `exclude-print theme-float-secondary fixed bottom-24 right-8 flex items-center gap-2 px-6 py-3 rounded-full z-40 ${triggerClassName}`.trim()}
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
-        Customize for Job
+        <span>Customize for Job</span>
       </button>
     );
   }

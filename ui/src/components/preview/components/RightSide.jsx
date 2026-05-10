@@ -3,7 +3,7 @@ import Projects from "./projects/ui/Projects";
 
 const RightSide = ({resumeData}) => {
   return (
-    <div className="col-span-2 space-y-3">
+    <div className="space-y-1.5">
       {resumeData.workExperience.length > 0 && (
         <WorkExperiences/>
       )}

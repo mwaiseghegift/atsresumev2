@@ -3,13 +3,27 @@ import {ResumeContext} from "../../../../builder";
 import {addSocialMedia} from "../units/addSocialMedia";
 import SocialMedia from "../components/SocialMedia";
 import {MdAddCircle} from "react-icons/md";
+import EditorSection from "../../../../ui/EditorSection";
 
 const SocialMedias = () => {
   const {resumeData, setResumeData} = useContext(ResumeContext);
 
   return (
-    <div className="flex-col-gap-2">
-      <h2 className="input-title">Social Media</h2>
+    <EditorSection
+      title="Social links"
+      description="Add the professional profiles you want to surface in the header."
+      actions={(
+        <button type="button"
+                onClick={() => {
+                  addSocialMedia(resumeData, setResumeData)
+                }}
+                aria-label="Add"
+                className="theme-button-secondary inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
+          <MdAddCircle className="text-base"/>
+          Add Link
+        </button>
+      )}
+    >
       {resumeData.socialMedia.map((socialMedia, index) => (
         <SocialMedia
           key={index}
@@ -17,16 +31,7 @@ const SocialMedias = () => {
           index={index}
         />
       ))}
-      <button type="button"
-              onClick={() => {
-                addSocialMedia(resumeData, setResumeData)
-              }}
-              aria-label="Add"
-              className="theme-button-secondary inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
-        <MdAddCircle className="text-base"/>
-        Add
-      </button>
-    </div>
+    </EditorSection>
   );
 };
 

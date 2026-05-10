@@ -8,12 +8,8 @@ const WorkExperience = ({workExperience, index}) => {
   const {resumeData, setResumeData,} = useContext(ResumeContext);
 
   return (
-    <div
-      className="flex w-fill gap-5 items-top"
-    >
-      <div
-        className="flex-1"
-      >
+    <div className="editor-row">
+      <div className="editor-row-fields editor-grid-2-tight">
         <input
           type="text"
           placeholder="Company"
@@ -38,7 +34,7 @@ const WorkExperience = ({workExperience, index}) => {
           type="text"
           placeholder="Description"
           name="description"
-          className="w-full other-input h-32"
+          className="w-full other-input h-32 editor-field-span-2"
           value={workExperience.description}
           maxLength="250"
           onChange={(e) =>
@@ -49,15 +45,13 @@ const WorkExperience = ({workExperience, index}) => {
           type="text"
           placeholder="Key Achievements"
           name="keyAchievements"
-          className="w-full other-input h-40"
+          className="w-full other-input h-40 editor-field-span-2"
           value={workExperience.keyAchievements}
           onChange={(e) =>
             handleWorkExperience(resumeData, setResumeData, e, index)
           }
         />
-        <div
-          className={"w-fill flex-wrap-gap-2"}
-        >
+        <div className="editor-grid-2-tight editor-field-span-2">
           <input
             type="date"
             placeholder="Start Year"
@@ -80,6 +74,7 @@ const WorkExperience = ({workExperience, index}) => {
           />
         </div>
       </div>
+      <div className="editor-row-action">
       <button
         type="button"
         onClick={() => {
@@ -90,6 +85,7 @@ const WorkExperience = ({workExperience, index}) => {
       >
         <BsTrash3/>
       </button>
+      </div>
     </div>
   );
 };

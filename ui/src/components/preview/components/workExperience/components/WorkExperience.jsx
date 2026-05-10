@@ -23,20 +23,22 @@ const WorkExperience = ({item, index}) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className={`mb-3 ${
+          className={`document-item ${
             snapshot.isDragging &&
             "outline-dashed outline-2 outline-gray-400 bg-white"
           }`}
         >
-          <div className="flex flex-row justify-between space-y-1">
-            <p className="content i-bold">{item.company}</p>
+          <div className="document-item-header">
+            <div>
+              <p className="document-item-title">{item.company}</p>
+              <p className="document-item-subtitle">{item.position}</p>
+            </div>
             <DateRange
               startYear={item.startYear}
               endYear={item.endYear}
               id={`work-experience-start-end-date`}
             />
           </div>
-          <p className="content">{item.position}</p>
           <p className="content hyphens-auto">{item.description}</p>
 
           <Droppable
@@ -45,7 +47,7 @@ const WorkExperience = ({item, index}) => {
           >
             {(provided) => (
               <ul
-                className="list-disc ul-padding content"
+                className="document-list content"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >

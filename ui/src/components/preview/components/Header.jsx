@@ -4,7 +4,7 @@ import { MdPhone, MdEmail, MdLocationOn } from "react-icons/md";
 
 const Header = ({ resumeData, icons }) => {
   return (
-    <div className="f-col items-center mb-3 exclude-print">
+    <div className="f-col items-center mb-4 exclude-print text-center">
       {resumeData.profilePicture.length > 0 && (
         <div className="theme-resume-avatar w-24 h-24 rounded-full overflow-hidden border-2 mb-2">
           <Image
@@ -17,11 +17,11 @@ const Header = ({ resumeData, icons }) => {
         </div>
       )}
 
-      <h1 className="name">{resumeData.name}</h1>
-      <p className="profession mb-2">{resumeData.position}</p>
+      <h1 className="name text-[2rem]">{resumeData.name}</h1>
+      <p className="profession mb-3 text-[0.95rem] tracking-[0.12em] uppercase text-[#355261]">{resumeData.position}</p>
 
       <ContactInfo
-        mainclass="flex flex-wrap justify-center gap-x-3 gap-y-1 mb-2 contact"
+        mainclass="flex flex-wrap justify-center gap-x-4 gap-y-1.5 mb-2 contact text-[#4a6270]"
         linkclass="inline-flex items-center gap-1 whitespace-nowrap"
         teldata={resumeData.contactInformation}
         emaildata={resumeData.email}
@@ -31,7 +31,7 @@ const Header = ({ resumeData, icons }) => {
         addressicon={<MdLocationOn />}
       />
 
-      <div className="flex flex-wrap justify-center gap-2">
+      <div className="flex flex-wrap justify-center gap-3 text-[#2A9D8F]">
         {resumeData.socialMedia.map((socialMedia, index) => {
           return (
             <a
@@ -41,7 +41,7 @@ const Header = ({ resumeData, icons }) => {
               title={socialMedia.socialMedia}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1 social-media whitespace-nowrap"
+              className="inline-flex items-center gap-1 social-media whitespace-nowrap document-link"
             >
               {icons.map((icon, index) => {
                 if (icon.name === socialMedia.socialMedia.toLowerCase()) {

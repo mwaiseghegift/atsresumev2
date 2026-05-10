@@ -3,6 +3,7 @@ import DateRange from "../../../../utility/DateRange";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import {ResumeContext} from "../../../../builder";
+import DocumentSection from "../../../../ui/DocumentSection";
 
 const Droppable = dynamic(
   () => import("@hello-pangea/dnd").then((mod) => mod.Droppable),
@@ -19,31 +20,25 @@ const Projects = () => {
     <Droppable droppableId="projects" type="PROJECTS">
       {(provided) => (
         <div {...provided.droppableProps} ref={provided.innerRef}>
-          <h2
-            className="section-title mb-1.5 border-b-2 border-gray-300 editable"
-            contentEditable
-            suppressContentEditableWarning
-          >
-            Projects
-          </h2>
-          {resumeData.projects.map((item, index) => (
-            <Draggable
-              key={`${item.name}-${index}`}
-              draggableId={`PROJECTS-${index}`}
-              index={index}
-            >
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  className={`mb-3 ${
-                    snapshot.isDragging &&
-                    "outline-dashed outline-2 outline-gray-400 bg-white"
-                  }`}
-                >
-                  <div className="flex flex-row justify-between space-y-1">
-                    <p className="content i-bold">{item.name || item.title}</p>
+          <DocumentSection title="Projects" editable>
+            {resumeData.projects.map((item, index) => (
+              <Draggable
+                key={`${item.name}-${index}`}
+                draggableId={`PROJECTS-${index}`}
+                index={index}
+              >
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    className={`document-item ${
+                      snapshot.isDragging &&
+                      "outline-dashed outline-2 outline-gray-400 bg-white"
+                    }`}
+                  >
+                  <div className="document-item-header">
+                    <p className="document-item-title">{item.name || item.title}</p>
                     <DateRange
                       startYear={item.startYear}
                       endYear={item.endYear}
@@ -56,7 +51,7 @@ const Projects = () => {
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="content"
+                      className="content document-link"
                     >
                       {item.link}
                     </Link>
@@ -69,7 +64,7 @@ const Projects = () => {
                   >
                     {(provided) => (
                       <ul
-                        className="list-disc ul-padding content"
+                        className="document-list content"
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
@@ -108,10 +103,11 @@ const Projects = () => {
                       </ul>
                     )}
                   </Droppable>
-                </div>
-              )}
-            </Draggable>
-          ))}
+                  </div>
+                )}
+              </Draggable>
+            ))}
+          </DocumentSection>
           {provided.placeholder}
         </div>
       )}

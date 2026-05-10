@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import dynamic from "next/dynamic";
 import {ResumeContext} from "../../../../builder";
 import WorkExperience from "../components/WorkExperience";
+import DocumentSection from "../../../../ui/DocumentSection";
 
 const Droppable = dynamic(
   () => import("@hello-pangea/dnd").then((mod) => mod.Droppable),
@@ -15,20 +16,15 @@ const WorkExperiences = () => {
     <Droppable droppableId="work-experience" type="WORK_EXPERIENCE">
       {(provided) => (
         <div {...provided.droppableProps} ref={provided.innerRef}>
-          <h2
-            className="section-title mb-1.5 border-b-2 border-gray-300 editable"
-            contentEditable
-            suppressContentEditableWarning
-          >
-            Work Experience
-          </h2>
-          {resumeData.workExperience.map((item, index) => (
-            <WorkExperience
-              key={index}
-              item={item}
-              index={index}
-            />
-          ))}
+          <DocumentSection title="Work Experience" editable>
+            {resumeData.workExperience.map((item, index) => (
+              <WorkExperience
+                key={index}
+                item={item}
+                index={index}
+              />
+            ))}
+          </DocumentSection>
           {provided.placeholder}
         </div>
       )}

@@ -11,7 +11,7 @@ const A4PageWrapper = ({children}) => {
   };
 
   return (
-    <div id="resume-pdf-content" className="w-8.5in min-h-11.7in bg-white text-black shadow-2xl shadow-black/50 p-6" onLoad={alertA4Size}>
+    <div id="resume-pdf-content" className="document-shell" onLoad={alertA4Size}>
       {children}
     </div>
   );

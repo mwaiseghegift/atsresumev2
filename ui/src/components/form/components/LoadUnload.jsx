@@ -2,7 +2,7 @@ import { FaCloudUploadAlt, FaCloudDownloadAlt } from "react-icons/fa";
 import React, { useContext } from "react";
 import {ResumeContext} from "../../builder";
 
-const LoadUnload = () => {
+const LoadUnload = ({ compact = false }) => {
   const { resumeData, setResumeData } = useContext(ResumeContext);
 
   // load backup resume data
@@ -27,10 +27,8 @@ const LoadUnload = () => {
     link.click();
   };
 
-  return (
-    <div className="section-card mb-4">
-      <p className="text-[0.6rem] theme-muted-text uppercase tracking-widest font-semibold mb-3">Backup Data</p>
-      <div className="flex flex-row gap-3">
+  const content = (
+      <div className="flex flex-row gap-3 flex-wrap">
         <label className="flex-1 cursor-pointer group">
           <div className="theme-button-soft flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium group-hover:text-white">
             <FaCloudUploadAlt className="text-base theme-accent-text transition-colors" />
@@ -60,6 +58,16 @@ const LoadUnload = () => {
           Save Data
         </button>
       </div>
+  );
+
+  if (compact) {
+    return content;
+  }
+
+  return (
+    <div className="section-card mb-4">
+      <p className="text-[0.6rem] theme-muted-text uppercase tracking-widest font-semibold mb-3">Backup Data</p>
+      {content}
     </div>
   );
 };

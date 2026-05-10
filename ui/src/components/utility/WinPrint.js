@@ -2,7 +2,7 @@ import { MdPictureAsPdf } from "react-icons/md";
 import { useContext } from "react";
 import { ResumeContext } from "../builder";
 
-const WinPrint = () => {
+const WinPrint = ({ className = "", compact = false }) => {
   const { resumeData } = useContext(ResumeContext);
 
   const downloadPDF = () => {
@@ -23,11 +23,14 @@ const WinPrint = () => {
   return (
     <button
       aria-label="Download Resume as PDF"
-      className="exclude-print theme-float-secondary fixed bottom-5 right-10 rounded-full p-2 font-bold"
+      className={compact
+        ? `theme-button-primary inline-flex items-center gap-2 px-4 py-2.5 text-sm ${className}`.trim()
+        : `exclude-print theme-float-secondary fixed bottom-5 right-10 rounded-full p-2 font-bold ${className}`.trim()}
       onClick={downloadPDF}
       title="Print / Save as PDF (Ctrl+P)"
     >
-      <MdPictureAsPdf className="w-10 h-10" />
+      <MdPictureAsPdf className={compact ? "w-5 h-5" : "w-10 h-10"} />
+      {compact && <span>Download PDF</span>}
     </button>
   );
 };
