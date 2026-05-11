@@ -757,6 +757,48 @@
         margin: 0;
     }
 
+    /* Reset builder layout to show only the preview */
+    .builder-layout-container {
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .builder-layout {
+        display: block !important;
+        overflow: visible !important;
+        height: auto !important;
+    }
+
+    .preview-panel {
+        display: block !important;
+        width: 100% !important;
+        background: white !important;
+        overflow: visible !important;
+        height: auto !important;
+    }
+
+    /* Collapse wrapper padding/dimensions that cause a blank second page */
+    .preview-scroll {
+        padding: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    .document-stage {
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    .document-shell {
+        width: 100% !important;
+        min-height: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 10mm !important;
+    }
+
     .preview {
         overflow-y: visible !important;
         max-height: none !important;

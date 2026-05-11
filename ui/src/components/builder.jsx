@@ -273,7 +273,7 @@ export default function Builder() {
           />
 
           {/* 2 · Section editor */}
-          <div className="editor-panel light-editor">
+          <div className="editor-panel light-editor exclude-print">
             <div className="editor-panel-header">
               <div className="flex items-center justify-between gap-2">
                 <div>
