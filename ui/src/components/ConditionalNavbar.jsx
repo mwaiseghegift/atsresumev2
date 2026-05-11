@@ -5,6 +5,6 @@ import Navbar from './Navbar';
 
 export default function ConditionalNavbar() {
   const pathname = usePathname();
-  if (pathname === '/') return null; // builder renders its own header
+  if (pathname === '/' || pathname === '/builder') return null; // these pages render their own headers
   return <Navbar />;
 }

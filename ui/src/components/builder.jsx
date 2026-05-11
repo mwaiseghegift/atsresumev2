@@ -3,7 +3,6 @@
 import React, { createContext, useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Meta from "../components/meta/Meta";
 import Preview from "../components/preview/ui/Preview";
 import DefaultResumeData from "../components/utility/DefaultResumeData";
 import SectionNav, { SECTIONS } from "../components/SectionNav";
@@ -244,12 +243,6 @@ export default function Builder() {
 
   return (
     <ResumeContext.Provider value={{ resumeData, setResumeData, handleProfilePicture, handleChange }}>
-      <Meta
-        title="ATSResume | Build & optimise your ATS resume"
-        description="AI-powered resume builder that optimises your resume for Applicant Tracking Systems."
-        keywords="ATS resume builder, AI resume, resume optimiser"
-      />
-
       <div className="builder-layout-container">
 
         {/* ── Full builder navbar ── */}
