@@ -129,13 +129,8 @@ function BuilderHeader({ user, isSaving, saveSuccess, onSave, onCustomize, onLog
         >
           Builder
         </span>
-        {user && (
-          <Link href="/dashboard" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">
-            Resumes
-          </Link>
-        )}
-        <span className="px-3 py-1.5 text-sm font-medium text-gray-300 cursor-default">Job Tracker</span>
-        <span className="px-3 py-1.5 text-sm font-medium text-gray-300 cursor-default">Templates</span>
+        <span className="px-3 py-1.5 text-sm font-medium text-gray-400 cursor-not-allowed">Job Tracker</span>
+        <span className="px-3 py-1.5 text-sm font-medium text-gray-400 cursor-not-allowed">Templates</span>
       </nav>
 
       {/* Spacer */}
@@ -158,7 +153,7 @@ function BuilderHeader({ user, isSaving, saveSuccess, onSave, onCustomize, onLog
             <SaveIcon /> Save
           </button>
         )}
-        <button onClick={onCustomize} className="builder-action-btn">
+        <button onClick={onCustomize} className="builder-action-btn builder-customize-btn">
           <SparkleIcon /> Customize for Job
         </button>
         <Print compact />
@@ -299,6 +294,13 @@ export default function Builder() {
 
           {/* 3 · Resume preview */}
           <div className="preview-panel">
+            <div className="preview-panel-header exclude-print">
+              <span className="preview-panel-header-title">Live Preview</span>
+              <div className="preview-panel-header-controls">
+                <span className="preview-fit-btn">Fit</span>
+                <span className="preview-zoom-badge">100%</span>
+              </div>
+            </div>
             <Preview />
           </div>
 

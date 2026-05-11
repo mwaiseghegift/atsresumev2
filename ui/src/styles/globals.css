@@ -76,11 +76,12 @@
 }
 
 @utility pi {
-    @apply p-2.5 mb-2 rounded-xl text-[0.875rem] placeholder-transparent transition-all duration-200;
+    @apply p-2.5 rounded-xl text-[0.875rem] transition-all duration-200;
     color: var(--color-copy);
     background: rgba(19, 47, 59, 0.88);
     border: 1px solid rgba(42, 157, 143, 0.28);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    width: 100%;
 }
 
 .pi::placeholder {
@@ -90,6 +91,22 @@
 .pi:focus {
     border-color: rgba(233, 196, 106, 0.7);
     box-shadow: 0 0 0 4px rgba(233, 196, 106, 0.14);
+}
+
+/* Labeled input field wrapper */
+.pi-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.pi-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+    line-height: 1.4;
+}
+.pi-field .pi {
+    margin-bottom: 0;
 }
 
 @utility profileInput {
@@ -117,7 +134,7 @@
 }
 
 @utility other-input {
-    @apply pi focus:placeholder-transparent;
+    @apply pi;
 }
 
 @utility input-title {
@@ -1048,18 +1065,18 @@ body {
 
 /* ===== EDITOR PANEL (centre-left) ===== */
 .editor-panel {
-    width: 360px; flex-shrink: 0;
+    width: 380px; flex-shrink: 0;
     background: #F9FAFB; border-right: 1px solid #E5E7EB;
     display: flex; flex-direction: column; overflow: hidden;
 }
 
 .editor-panel-header {
-    padding: 1rem 1.25rem 0.75rem;
+    padding: 1.125rem 1.25rem 0.875rem;
     background: #FFFFFF; border-bottom: 1px solid #E5E7EB;
     flex-shrink: 0;
 }
-.editor-panel-title { font-size: 0.9375rem; font-weight: 700; color: var(--color-text); }
-.editor-panel-desc { font-size: 0.8rem; color: var(--color-text-3); margin-top: 0.125rem; }
+.editor-panel-title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+.editor-panel-desc { font-size: 0.8125rem; color: var(--color-text-3); margin-top: 0.2rem; line-height: 1.4; }
 
 .editor-panel-scroll { flex: 1; overflow-y: auto; padding: 1rem 1rem 1.5rem; }
 
@@ -1126,9 +1143,10 @@ body {
 .light-editor .other-input {
     color: #111827; background: #FFFFFF;
     border: 1px solid #E5E7EB; box-shadow: none;
+    placeholder-color: #9CA3AF;
 }
 .light-editor .pi::placeholder,
-.light-editor .other-input::placeholder { color: #9CA3AF; }
+.light-editor .other-input::placeholder { color: #9CA3AF; opacity: 1; }
 .light-editor .pi:focus,
 .light-editor .other-input:focus {
     border-color: var(--color-teal);
@@ -1158,4 +1176,237 @@ body {
     .editor-panel { width: 100%; border-right: none; }
     .ai-panel { display: none; }
     .builder-layout { flex-direction: column; }
+    .preview-panel { display: none; }
 }
+
+@media (min-width: 901px) and (max-width: 1200px) {
+    .section-nav { width: 160px; }
+    .editor-panel { width: 300px; }
+    .ai-panel { width: 260px; }
+}
+
+/* ===== BUILDER CUSTOMIZE BUTTON (matches design's primary style) ===== */
+.builder-customize-btn {
+    background: transparent;
+    border: 1px solid #E5E7EB;
+    color: #374151;
+}
+.builder-customize-btn:hover {
+    background: #F3F4F6;
+    border-color: #D1D5DB;
+}
+
+/* ===== PREVIEW PANEL HEADER ===== */
+.preview-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 1rem;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E5E7EB;
+    flex-shrink: 0;
+    z-index: 5;
+    position: sticky;
+    top: 0;
+}
+.preview-panel-header-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+.preview-panel-header-title::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10B981;
+    flex-shrink: 0;
+}
+.preview-panel-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.preview-fit-btn {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6B7280;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    background: #fff;
+    transition: all 140ms ease;
+}
+.preview-fit-btn:hover { background: #F3F4F6; }
+.preview-zoom-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #374151;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.375rem;
+    background: #F9FAFB;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.preview-zoom-badge::after {
+    content: '\25BE';
+    font-size: 0.6rem;
+    color: #9CA3AF;
+}
+
+/* ===== SOCIAL MEDIA ROW (new design) ===== */
+.social-media-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.social-media-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.625rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.625rem;
+    background: #F9FAFB;
+    transition: border-color 140ms ease, background 140ms ease;
+}
+.social-media-row:hover { border-color: #D1D5DB; background: #F3F4F6; }
+.social-media-platform-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 0.375rem;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    color: #374151;
+    flex-shrink: 0;
+}
+.social-media-select {
+    flex: 0 0 auto;
+    min-width: 110px;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.375rem;
+    background: #FFFFFF;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 140ms ease;
+}
+.social-media-select:focus { border-color: #0D9488; }
+.social-media-link-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.375rem;
+    background: #FFFFFF;
+    font-size: 0.8125rem;
+    color: #374151;
+    outline: none;
+    transition: border-color 140ms ease;
+}
+.social-media-link-input::placeholder { color: #9CA3AF; }
+.social-media-link-input:focus { border-color: #0D9488; }
+.social-media-delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 0.375rem;
+    background: transparent;
+    border: none;
+    color: #EF4444;
+    cursor: pointer;
+    transition: background 140ms ease;
+    flex-shrink: 0;
+}
+.social-media-delete-btn:hover { background: #FEE2E2; }
+
+/* ===== ADD PROFILE BUTTON ===== */
+.add-profile-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border: 1.5px dashed #D1D5DB;
+    border-radius: 0.625rem;
+    background: transparent;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 140ms ease;
+    margin-top: 0.25rem;
+}
+.add-profile-btn:hover {
+    border-color: #0D9488;
+    color: #0D9488;
+    background: #F0FDF9;
+}
+.add-profile-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+    font-weight: 400;
+}
+
+/* ===== LOAD / SAVE DATA BUTTONS ===== */
+.load-unload-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.load-data-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.45rem 0.875rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    background: #FFFFFF;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #374151;
+    transition: all 140ms ease;
+    white-space: nowrap;
+}
+.load-data-btn:hover { background: #F3F4F6; border-color: #D1D5DB; }
+.save-data-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.45rem 0.875rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: #0D9488;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background 140ms ease;
+    white-space: nowrap;
+}
+.save-data-btn:hover { background: #0F766E; }
+
+/* ===== LIGHT EDITOR: override pi-label color ===== */
+.light-editor .pi-label { color: #374151; }

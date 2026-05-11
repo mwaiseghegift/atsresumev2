@@ -28,36 +28,34 @@ const LoadUnload = ({ compact = false }) => {
   };
 
   const content = (
-      <div className="flex flex-row gap-3 flex-wrap">
-        <label className="flex-1 cursor-pointer group">
-          <div className="theme-button-soft flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium group-hover:text-white">
-            <FaCloudUploadAlt className="text-base theme-accent-text transition-colors" />
-            Load Data
-          </div>
-          <input
-            aria-label="Load Data"
-            type="file"
-            className="hidden"
-            onChange={handleLoad}
-            accept=".json"
-          />
-        </label>
+    <div className="load-unload-row">
+      <label className="load-data-btn cursor-pointer">
+        <FaCloudUploadAlt className="text-base" />
+        Load Data
+        <input
+          aria-label="Load Data"
+          type="file"
+          className="hidden"
+          onChange={handleLoad}
+          accept=".json"
+        />
+      </label>
 
-        <button
-          aria-label="Save Data"
-          className="theme-button-secondary flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium group"
-          onClick={(event) =>
-            handleDownload(
-              resumeData,
-              resumeData.name + " by ATSResume.json",
-              event
-            )
-          }
-        >
-          <FaCloudDownloadAlt className="text-base transition-colors" />
-          Save Data
-        </button>
-      </div>
+      <button
+        aria-label="Save Data"
+        className="save-data-btn"
+        onClick={(event) =>
+          handleDownload(
+            resumeData,
+            resumeData.name + " by ATSResume.json",
+            event
+          )
+        }
+      >
+        <FaCloudDownloadAlt className="text-base" />
+        Save Data
+      </button>
+    </div>
   );
 
   if (compact) {

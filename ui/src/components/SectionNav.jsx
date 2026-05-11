@@ -33,8 +33,11 @@ function CompletenessRing({ value }) {
 }
 
 export default function SectionNav({ activeSection, setActiveSection, completeness = 0 }) {
-  const statusText  = completeness >= 80 ? 'Good progress!'     : completeness >= 50 ? 'Keep going!'     : 'Just starting';
-  const statusColor = completeness >= 80 ? '#059669'            : completeness >= 50 ? '#D97706'          : '#9CA3AF';
+  const statusText  = completeness >= 100 ? 'Great! Your resume looks complete.'
+                    : completeness >= 80  ? 'Good progress!'
+                    : completeness >= 50  ? 'Keep going!'
+                    : 'Just starting';
+  const statusColor = completeness >= 80 ? '#059669' : completeness >= 50 ? '#D97706' : '#9CA3AF';
 
   return (
     <aside className="section-nav exclude-print">
@@ -58,7 +61,9 @@ export default function SectionNav({ activeSection, setActiveSection, completene
         <CompletenessRing value={completeness} />
         <p className="completeness-label">Resume Completeness</p>
         <p className="completeness-status" style={{ color: statusColor }}>{statusText}</p>
-        <p className="completeness-hint">Add more details to reach 100%</p>
+        {completeness < 100 && (
+          <p className="completeness-hint">Add more details to reach 100%</p>
+        )}
       </div>
     </aside>
   );
