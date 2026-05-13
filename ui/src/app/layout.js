@@ -76,7 +76,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className={openSans.variable}>
-      <body className="app-shell" suppressHydrationWarning>
+      <body className={`app-shell font-sans`} suppressHydrationWarning>
         <AuthProvider>
           <ConditionalNavbar />
           <main className="relative z-10">
