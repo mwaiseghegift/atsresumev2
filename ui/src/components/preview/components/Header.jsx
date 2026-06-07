@@ -5,7 +5,7 @@ import { MdPhone, MdEmail, MdLocationOn } from "react-icons/md";
 const Header = ({ resumeData, icons }) => {
   return (
     <div className="f-col items-center mb-4 text-center">
-      {resumeData.profilePicture.length > 0 && (
+      {resumeData.profilePicture?.length > 0 && (
         <div className="theme-resume-avatar w-24 h-24 rounded-full overflow-hidden border-2 mb-2 exclude-print">
           <Image
             src={resumeData.profilePicture}
@@ -32,7 +32,7 @@ const Header = ({ resumeData, icons }) => {
       />
 
       <div className="flex flex-wrap justify-center gap-3 text-[#2A9D8F]">
-        {resumeData.socialMedia.map((socialMedia, index) => {
+        {(resumeData.socialMedia ?? []).map((socialMedia, index) => {
           return (
             <a
               href={`http://${socialMedia.link}`}
@@ -44,7 +44,7 @@ const Header = ({ resumeData, icons }) => {
               className="inline-flex items-center gap-1 social-media whitespace-nowrap document-link"
             >
               {icons.map((icon, index) => {
-                if (icon.name === socialMedia.socialMedia.toLowerCase()) {
+                if (icon.name === socialMedia.socialMedia?.toLowerCase()) {
                   return <span key={index}>{icon.icon}</span>;
                 }
               })}

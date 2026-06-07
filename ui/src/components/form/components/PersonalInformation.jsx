@@ -19,7 +19,7 @@ const PersonalInformation = ({}) => {
             placeholder="e.g. Marcus Hall"
             name="name"
             className="pi"
-            value={resumeData.name}
+            value={resumeData.name ?? ''}
             onChange={handleChange}
           />
         </div>
@@ -30,7 +30,7 @@ const PersonalInformation = ({}) => {
             placeholder="e.g. Software Engineer"
             name="position"
             className="pi"
-            value={resumeData.position}
+            value={resumeData.position ?? ''}
             onChange={handleChange}
           />
         </div>
@@ -41,7 +41,7 @@ const PersonalInformation = ({}) => {
             placeholder="+1-555-0100"
             name="contactInformation"
             className="pi"
-            value={resumeData.contactInformation}
+            value={resumeData.contactInformation ?? ''}
             onChange={handleChange}
             minLength="10"
             maxLength="15"
@@ -54,7 +54,7 @@ const PersonalInformation = ({}) => {
             placeholder="you@example.com"
             name="email"
             className="pi"
-            value={resumeData.email}
+            value={resumeData.email ?? ''}
             onChange={handleChange}
           />
         </div>
@@ -65,7 +65,7 @@ const PersonalInformation = ({}) => {
             placeholder="City, State"
             name="address"
             className="pi"
-            value={resumeData.address}
+            value={resumeData.address ?? ''}
             onChange={handleChange}
           />
         </div>

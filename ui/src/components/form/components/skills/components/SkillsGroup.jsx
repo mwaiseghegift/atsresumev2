@@ -8,7 +8,7 @@ import EditorSection from "../../../../ui/EditorSection";
 const SkillsGroup = ({title}) => {
   const {resumeData, setResumeData} = useContext(ResumeContext);
 
-  const skillType = resumeData.skills.find(
+  const skillType = resumeData.skills?.find(
     (skillType) => skillType.title === title
   );
 
@@ -25,7 +25,7 @@ const SkillsGroup = ({title}) => {
         </button>
       )}
     >
-      {skillType.skills.map((skill, index) => (
+      {skillType?.skills?.map((skill, index) => (
         <SkillLine key={index} skill={skill} title={title} index={index}/>
       ))}
     </EditorSection>

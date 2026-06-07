@@ -24,7 +24,7 @@ const Projects = () => {
         </button>
       )}
     >
-      {resumeData.projects.map((project, index) => (
+      {resumeData.projects?.map((project, index) => (
         <Project
           key={index}
           project={project}

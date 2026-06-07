@@ -8,7 +8,7 @@ const Skills = () => {
   return (
     <div>
       {
-        resumeData.skills.map((skill, index) => (
+        resumeData.skills?.map((skill, index) => (
           <SkillsGroup
             title={skill.title}
             key={index}

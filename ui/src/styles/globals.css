@@ -75,7 +75,7 @@
 }
 
 @utility pi {
-    @apply p-2.5 rounded-xl text-[0.875rem] transition-all duration-200;
+    @apply px-3 py-2.5 rounded-xl text-[0.875rem] leading-relaxed transition-all duration-200;
     color: var(--color-copy);
     background: rgba(19, 47, 59, 0.88);
     border: 1px solid rgba(42, 157, 143, 0.28);
@@ -518,10 +518,9 @@
 }
 
 .editor-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    display: flex;
+    flex-direction: column;
     gap: 0.875rem;
-    align-items: start;
     padding: 1rem;
     border-radius: 1.25rem;
     background: rgba(248, 243, 231, 0.03);
@@ -538,9 +537,10 @@
 }
 
 .editor-row-action {
-    align-self: stretch;
     display: flex;
-    align-items: center;
+    justify-content: flex-end;
+    padding-top: 0.25rem;
+    border-top: 1px solid rgba(233, 196, 106, 0.08);
 }
 
 .editor-actions {
@@ -1144,6 +1144,11 @@ body {
     to   { transform: translateX(0);    opacity: 1; }
 }
 
+@keyframes toastIn {
+    from { transform: translateX(-50%) translateY(-12px); opacity: 0; }
+    to   { transform: translateX(-50%) translateY(0);     opacity: 1; }
+}
+
 .ai-panel {
     width: 320px; flex-shrink: 0;
     background: #FFFFFF; border-left: 1px solid #E5E7EB;
@@ -1200,6 +1205,13 @@ body {
 .light-editor .other-input {
     color: #111827; background: #FFFFFF;
     border: 1px solid #E5E7EB; box-shadow: none;
+    border-radius: 0.5rem; /* rounded-lg — less extreme than rounded-xl */
+    padding: 0.625rem 0.875rem; /* 10px top/bottom, 14px left/right */
+}
+.light-editor textarea.pi,
+.light-editor textarea.other-input {
+    line-height: 1.6;
+    padding: 0.75rem 0.875rem;
 }
 .light-editor .pi::placeholder,
 .light-editor .other-input::placeholder { color: #9CA3AF; opacity: 1; }
@@ -1214,6 +1226,7 @@ body {
 .light-editor .editor-section-note { color: #6B7280; }
 .light-editor .section-card { background: #FFFFFF; border: 1px solid #E5E7EB; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
 .light-editor .editor-row { background: #F9FAFB; border: 1px solid #F3F4F6; }
+.light-editor .editor-row-action { border-top-color: #E5E7EB; }
 .light-editor .theme-button-danger { color: #EF4444; background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.22); }
 .light-editor .theme-button-ghost { color: #374151; background: transparent; border-color: #E5E7EB; }
 .light-editor .theme-button-ghost:hover { background: #F9FAFB; }

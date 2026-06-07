@@ -27,7 +27,7 @@ const WorkExperiences = () => {
         </button>
       )}
     >
-      {resumeData.workExperience.map((workExperience, index) => (
+      {resumeData.workExperience?.map((workExperience, index) => (
         <WorkExperience
           key={index}
           workExperience={workExperience}

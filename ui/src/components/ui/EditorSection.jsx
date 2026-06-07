@@ -2,7 +2,7 @@ import React from 'react';
 
 const EditorSection = ({ title, description, actions, children, className = '' }) => {
   return (
-    <section className={`editor-section ${className}`.trim()}>
+    <section className={`mb-2 editor-section ${className}`.trim()}>
       <div className="editor-section-header">
         <div>
           <h2 className="editor-section-title">{title}</h2>

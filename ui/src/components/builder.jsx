@@ -326,16 +326,12 @@ export default function Builder() {
           {/* Section editor */}
           <div className="editor-panel light-editor">
             <div className="editor-panel-header">
-              <div className="flex items-center justify-between gap-2">
-                <div>
-                  <h2 className="editor-panel-title">{activeSectionMeta?.label}</h2>
-                  {activeSectionMeta?.desc && (
-                    <p className="editor-panel-desc">{activeSectionMeta.desc}</p>
-                  )}
-                </div>
-                <div className="shrink-0">
-                  <LoadUnload compact />
-                </div>
+              <h2 className="editor-panel-title">{activeSectionMeta?.label}</h2>
+              {activeSectionMeta?.desc && (
+                <p className="editor-panel-desc">{activeSectionMeta.desc}</p>
+              )}
+              <div className="mt-3">
+                <LoadUnload compact />
               </div>
             </div>
             <div className="editor-panel-scroll">

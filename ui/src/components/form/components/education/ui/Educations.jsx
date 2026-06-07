@@ -24,7 +24,7 @@ const Educations = () => {
         </button>
       )}
     >
-      {resumeData.education.map((education, index) => (
+      {resumeData.education?.map((education, index) => (
         <Education
           key={index}
           education={education}

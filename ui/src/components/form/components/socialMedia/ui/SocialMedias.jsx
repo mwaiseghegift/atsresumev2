@@ -13,7 +13,7 @@ const SocialMedias = () => {
       description="Add the professional profiles you want to surface in the header."
     >
       <div className="social-media-list">
-        {resumeData.socialMedia.map((socialMedia, index) => (
+        {resumeData.socialMedia?.map((socialMedia, index) => (
           <SocialMedia
             key={index}
             socialMedia={socialMedia}
