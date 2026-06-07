@@ -3,6 +3,7 @@ import { FiX, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
 import React, { useContext, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ResumeContext } from "../../builder";
+import DefaultResumeData from "../../utility/DefaultResumeData";
 
 /* ─── fields this app knows about ─── */
 const STRING_FIELDS = new Set([
@@ -138,6 +139,13 @@ const LoadUnload = ({ compact = false }) => {
     reader.readAsText(file);
   };
 
+  const handleLoadSample = () => {
+    const hasData = resumeData.name || resumeData.workExperience?.length > 0;
+    if (hasData && !window.confirm('Replace the current draft with sample data?')) return;
+    setResumeData(DefaultResumeData);
+    flash('ok', 'Sample resume loaded — feel free to edit it.');
+  };
+
   const handleDownload = (data, filename, e) => {
     e.preventDefault();
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -175,6 +183,22 @@ const LoadUnload = ({ compact = false }) => {
           Save Data
         </button>
       </div>
+
+      <button
+        aria-label="Load sample resume"
+        className="sample-data-btn"
+        onClick={handleLoadSample}
+      >
+        <span className="sample-data-line" aria-hidden="true" />
+        <span className="sample-data-inner">
+          {/* sparkle icon */}
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z" />
+          </svg>
+          Try sample data
+        </span>
+        <span className="sample-data-line" aria-hidden="true" />
+      </button>
     </>
   );
 

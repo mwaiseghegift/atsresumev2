@@ -1,10 +1,9 @@
 "use client";
 
-import React, { createContext, useState, useMemo } from "react";
+import React, { createContext, useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Preview from "../components/preview/ui/Preview";
-import DefaultResumeData from "../components/utility/DefaultResumeData";
 import SectionNav, { SECTIONS } from "../components/SectionNav";
 import AIPanel from "../components/AIPanel";
 import dynamic from "next/dynamic";
@@ -25,33 +24,42 @@ import LoadUnload from "../components/form/components/LoadUnload";
 
 const Print = dynamic(() => import("../components/utility/WinPrint"), { ssr: false });
 
-export const ResumeContext = createContext(DefaultResumeData);
+const BLANK_RESUME = {
+  name: '', position: '', contactInformation: '', email: '',
+  address: '', profilePicture: '', portfolioWebsite: '', summary: '',
+  socialMedia: [], workExperience: [], education: [],
+  skills: [], projects: [], languages: [], certifications: [],
+};
+
+const LS_KEY = 'atsresume_draft';
+
+export const ResumeContext = createContext(BLANK_RESUME);
 
 /* ─── completeness score ─── */
 function calcCompleteness(d) {
   let s = 0;
-  if (d.name)                            s += 15;
-  if (d.position)                        s += 5;
-  if (d.email)                           s += 10;
-  if (d.contactInformation)             s += 5;
-  if (d.summary)                         s += 15;
-  if (d.workExperience?.length > 0)     s += 20;
-  if (d.education?.length > 0)          s += 15;
-  if (d.skills?.length > 0)             s += 10;
-  if (d.socialMedia?.some(x => x.link))  s += 5;
+  if (d.name) s += 15;
+  if (d.position) s += 5;
+  if (d.email) s += 10;
+  if (d.contactInformation) s += 5;
+  if (d.summary) s += 15;
+  if (d.workExperience?.length > 0) s += 20;
+  if (d.education?.length > 0) s += 15;
+  if (d.skills?.length > 0) s += 10;
+  if (d.socialMedia?.some(x => x.link)) s += 5;
   return Math.min(s, 100);
 }
 
 /* ─── section → component map ─── */
 const SECTION_COMPONENTS = {
-  personal:       () => <><PersonalInformation /><SocialMedias /></>,
-  summary:        Summary,
-  experience:     WorkExperiences,
-  education:      Educations,
-  skills:         Skills,
-  projects:       Projects,
+  personal: () => <><PersonalInformation /><SocialMedias /></>,
+  summary: Summary,
+  experience: WorkExperiences,
+  education: Educations,
+  skills: Skills,
+  projects: Projects,
   certifications: TestsAndCertifications,
-  languages:      Languages,
+  languages: Languages,
 };
 
 function SectionEditor({ section }) {
@@ -141,7 +149,7 @@ function SaveIcon() {
 }
 
 /* ─── builder-specific top header ─── */
-function BuilderHeader({ user, isSaving, saveSuccess, applySuccess, onSave, onCustomize, onLogout }) {
+function BuilderHeader({ user, authLoading, isSaving, saveSuccess, applySuccess, onSave, onCustomize, onLogout, onClear }) {
   const initials = user?.username?.slice(0, 2).toUpperCase() ?? '';
 
   return (
@@ -207,6 +215,14 @@ function BuilderHeader({ user, isSaving, saveSuccess, applySuccess, onSave, onCu
 
       {/* ── Action buttons ── */}
       <div className="flex items-center gap-2 shrink-0">
+        <button
+          onClick={onClear}
+          className="builder-action-btn"
+          title="Clear draft and start blank"
+          style={{ color: '#9CA3AF' }}
+        >
+          Clear
+        </button>
         {user && (
           <button onClick={onSave} disabled={isSaving} className="builder-action-btn">
             <SaveIcon /> Save
@@ -218,19 +234,41 @@ function BuilderHeader({ user, isSaving, saveSuccess, applySuccess, onSave, onCu
         <Print compact />
       </div>
 
-      {/* ── User avatar / auth ── */}
-      {user ? (
-        <button
-          onClick={onLogout}
-          className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-bold text-white"
-          style={{ background: 'linear-gradient(135deg, #0D9488, #0F766E)' }}
-          title={`${user.username} — click to logout`}
-        >
-          {initials}
-        </button>
+      {/* ── User section ── */}
+      <div className="w-px h-5 bg-gray-200 shrink-0" />
+
+      {authLoading ? (
+        /* Skeleton while auth resolves — prevents sign-in button flash */
+        <div className="w-8 h-8 rounded-full bg-gray-100 shrink-0 animate-pulse" />
+      ) : user ? (
+        <div className="flex items-center gap-2 shrink-0">
+          <Link
+            href="/dashboard"
+            className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-bold text-white transition-opacity hover:opacity-80"
+            style={{ background: 'linear-gradient(135deg, #0D9488, #0F766E)' }}
+            title={`${user.username} — go to dashboard`}
+          >
+            {initials}
+          </Link>
+          <span className="hidden md:block text-sm font-medium text-gray-700 max-w-[100px] truncate">
+            {user.username}
+          </span>
+          <button
+            onClick={onLogout}
+            className="hidden sm:flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors px-2 py-1 rounded-md hover:bg-gray-100"
+            title="Sign out"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Sign out
+          </button>
+        </div>
       ) : (
         <div className="flex items-center gap-2 shrink-0">
-          <Link href="/login" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+          <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
             Log in
           </Link>
           <Link href="/register" className="btn-teal btn-teal-sm">Sign up</Link>
@@ -244,19 +282,37 @@ function BuilderHeader({ user, isSaving, saveSuccess, applySuccess, onSave, onCu
    Main Builder
    ══════════════════════════════════════════ */
 export default function Builder() {
-  const [resumeData, setResumeData]       = useState(DefaultResumeData);
+  const [resumeData, setResumeData] = useState(BLANK_RESUME);
   const [activeSection, setActiveSection] = useState('personal');
   const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);   // controls mounting
-  const [aiForceView,   setAiForceView]   = useState(null);    // jump-to view on open
-  const [mobileTab, setMobileTab]         = useState('edit');
-  const [isSaving, setIsSaving]           = useState(false);
-  const [saveSuccess, setSaveSuccess]     = useState(false);
-  const [applySuccess, setApplySuccess]   = useState(false);
-  const { user, logout }                = useAuth();
-  const router                          = useRouter();
+  const [aiForceView, setAiForceView] = useState(null);    // jump-to view on open
+  const [mobileTab, setMobileTab] = useState('edit');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [applySuccess, setApplySuccess] = useState(false);
+  const { user, loading: authLoading, logout } = useAuth();
+  const router = useRouter();
 
-  const completeness       = useMemo(() => calcCompleteness(resumeData), [resumeData]);
-  const activeSectionMeta  = SECTIONS.find(s => s.id === activeSection);
+  /* Restore draft from localStorage after hydration (must NOT run on server) */
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(LS_KEY);
+      if (saved) setResumeData(JSON.parse(saved));
+    } catch {/* quota exceeded or private mode */ }
+  }, []);
+
+  /* Persist draft to localStorage (debounced 800 ms so we don't thrash on every keystroke) */
+  const draftTimer = useRef(null);
+  useEffect(() => {
+    clearTimeout(draftTimer.current);
+    draftTimer.current = setTimeout(() => {
+      try { window.localStorage.setItem(LS_KEY, JSON.stringify(resumeData)); } catch {/* quota or private mode */ }
+    }, 800);
+    return () => clearTimeout(draftTimer.current);
+  }, [resumeData]);
+
+  const completeness = useMemo(() => calcCompleteness(resumeData), [resumeData]);
+  const activeSectionMeta = SECTIONS.find(s => s.id === activeSection);
 
   /* ─── save to dashboard ─── */
   const handleSaveDefault = async () => {
@@ -305,6 +361,12 @@ export default function Builder() {
   const openAiPanel = () => { setIsAiPanelOpen(true); setAiForceView('form'); setMobileTab('ai'); };
   const closeAiPanel = () => { setIsAiPanelOpen(false); setAiForceView(null); setMobileTab('edit'); };
 
+  const handleClearDraft = () => {
+    if (!window.confirm('Clear the current draft and start with a blank resume?')) return;
+    try { window.localStorage.removeItem(LS_KEY); } catch {/* ignore */ }
+    setResumeData(BLANK_RESUME);
+  };
+
   /* ─── logout ─── */
   const handleLogout = async () => {
     await logout();
@@ -318,12 +380,14 @@ export default function Builder() {
         {/* ── Full builder navbar ── */}
         <BuilderHeader
           user={user}
+          authLoading={authLoading}
           isSaving={isSaving}
           saveSuccess={saveSuccess}
           applySuccess={applySuccess}
           onSave={handleSaveDefault}
           onCustomize={openAiPanel}
           onLogout={handleLogout}
+          onClear={handleClearDraft}
         />
 
         {/* ── 3-column workspace ── */}
@@ -332,27 +396,27 @@ export default function Builder() {
           {/* 1+2 · Section nav + editor merged into one column */}
           <div className="editor-column exclude-print">
 
-          <SectionNav
-            activeSection={activeSection}
-            setActiveSection={setActiveSection}
-            completeness={completeness}
-          />
+            <SectionNav
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+              completeness={completeness}
+            />
 
-          {/* Section editor */}
-          <div className="editor-panel light-editor">
-            <div className="editor-panel-header">
-              <h2 className="editor-panel-title">{activeSectionMeta?.label}</h2>
-              {activeSectionMeta?.desc && (
-                <p className="editor-panel-desc">{activeSectionMeta.desc}</p>
-              )}
-              <div className="mt-3">
-                <LoadUnload compact />
+            {/* Section editor */}
+            <div className="editor-panel light-editor">
+              <div className="editor-panel-header">
+                <h2 className="editor-panel-title">{activeSectionMeta?.label}</h2>
+                {activeSectionMeta?.desc && (
+                  <p className="editor-panel-desc">{activeSectionMeta.desc}</p>
+                )}
+                <div className="mt-3">
+                  <LoadUnload compact />
+                </div>
+              </div>
+              <div className="editor-panel-scroll">
+                <SectionEditor section={activeSection} />
               </div>
             </div>
-            <div className="editor-panel-scroll">
-              <SectionEditor section={activeSection} />
-            </div>
-          </div>
 
           </div>{/* end editor-column */}
 
