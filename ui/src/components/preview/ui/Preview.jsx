@@ -32,7 +32,7 @@ const Preview = () => {
   ];
 
   return (
-    <div className="preview-scroll preview rm-padding-print overflow-x-auto md:overflow-y-auto md:h-[calc(100vh-15rem)]">
+    <div className="preview-scroll preview rm-padding-print">
       <div className="document-stage">
         <A4PageWrapper>
           <ModalHighlightMenu/>

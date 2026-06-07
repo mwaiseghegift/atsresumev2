@@ -59,6 +59,61 @@ function SectionEditor({ section }) {
   return Comp ? <Comp /> : null;
 }
 
+/* ─── mobile bottom tab bar ─── */
+function MobileTabBar({ mobileTab, setMobileTab }) {
+  const tabs = [
+    {
+      id: 'edit',
+      label: 'Edit',
+      icon: (active) => (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={active ? '#0D9488' : '#6B7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+      ),
+    },
+    {
+      id: 'preview',
+      label: 'Preview',
+      icon: (active) => (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={active ? '#0D9488' : '#6B7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      ),
+    },
+    {
+      id: 'ai',
+      label: 'AI',
+      icon: (active) => (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={active ? '#0D9488' : '#6B7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z" />
+          <path d="M19 3l.8 2.2L22 6l-2.2.8L19 9l-.8-2.2L16 6l2.2-.8z" />
+        </svg>
+      ),
+    },
+  ];
+
+  return (
+    <nav className="mobile-tab-bar exclude-print">
+      {tabs.map(({ id, label, icon }) => {
+        const active = mobileTab === id;
+        return (
+          <button
+            key={id}
+            type="button"
+            className={`mobile-tab-btn${active ? ' mobile-tab-btn-active' : ''}`}
+            onClick={() => setMobileTab(id)}
+          >
+            {icon(active)}
+            <span>{label}</span>
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
 /* ─── inline SVGs ─── */
 function CheckIcon() {
   return (
@@ -187,6 +242,7 @@ export default function Builder() {
   const [resumeData, setResumeData]     = useState(DefaultResumeData);
   const [activeSection, setActiveSection] = useState('personal');
   const [aiPanelView, setAiPanelView]   = useState(null);
+  const [mobileTab, setMobileTab]       = useState('edit');
   const [isSaving, setIsSaving]         = useState(false);
   const [saveSuccess, setSaveSuccess]   = useState(false);
   const { user, logout }                = useAuth();
@@ -251,22 +307,24 @@ export default function Builder() {
           isSaving={isSaving}
           saveSuccess={saveSuccess}
           onSave={handleSaveDefault}
-          onCustomize={() => setAiPanelView('form')}
+          onCustomize={() => { setAiPanelView('form'); setMobileTab('ai'); }}
           onLogout={handleLogout}
         />
 
-        {/* ── 4-column workspace ── */}
-        <div className="builder-layout">
+        {/* ── 3-column workspace ── */}
+        <div className="builder-layout" data-mobile-tab={mobileTab}>
 
-          {/* 1 · Section navigation */}
+          {/* 1+2 · Section nav + editor merged into one column */}
+          <div className="editor-column exclude-print">
+
           <SectionNav
             activeSection={activeSection}
             setActiveSection={setActiveSection}
             completeness={completeness}
           />
 
-          {/* 2 · Section editor */}
-          <div className="editor-panel light-editor exclude-print">
+          {/* Section editor */}
+          <div className="editor-panel light-editor">
             <div className="editor-panel-header">
               <div className="flex items-center justify-between gap-2">
                 <div>
@@ -285,6 +343,8 @@ export default function Builder() {
             </div>
           </div>
 
+          </div>{/* end editor-column */}
+
           {/* 3 · Resume preview */}
           <div className="preview-panel">
             <div className="preview-panel-header exclude-print">
@@ -297,15 +357,22 @@ export default function Builder() {
             <Preview />
           </div>
 
-          {/* 4 · AI assistant */}
-          <AIPanel
-            resumeData={resumeData}
-            onCustomized={handleCustomized}
-            forceView={aiPanelView}
-            setForceView={setAiPanelView}
-          />
+          {/* 4 · AI assistant — only rendered when open */}
+          {aiPanelView !== null && (
+            <AIPanel
+              resumeData={resumeData}
+              onCustomized={handleCustomized}
+              forceView={aiPanelView}
+              setForceView={setAiPanelView}
+              onClose={() => { setAiPanelView(null); setMobileTab('edit'); }}
+            />
+          )}
 
         </div>
+
+        {/* ── Mobile bottom tab bar (hidden on desktop) ── */}
+        <MobileTabBar mobileTab={mobileTab} setMobileTab={setMobileTab} />
+
       </div>
     </ResumeContext.Provider>
   );
