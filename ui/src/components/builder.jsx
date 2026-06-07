@@ -141,7 +141,7 @@ function SaveIcon() {
 }
 
 /* ─── builder-specific top header ─── */
-function BuilderHeader({ user, isSaving, saveSuccess, onSave, onCustomize, onLogout }) {
+function BuilderHeader({ user, isSaving, saveSuccess, applySuccess, onSave, onCustomize, onLogout }) {
   const initials = user?.username?.slice(0, 2).toUpperCase() ?? '';
 
   return (
@@ -190,8 +190,13 @@ function BuilderHeader({ user, isSaving, saveSuccess, onSave, onCustomize, onLog
       {/* Spacer */}
       <div className="flex-1 min-w-0" />
 
-      {/* ── Autosave status ── */}
-      {saveSuccess && (
+      {/* ── Status indicators ── */}
+      {applySuccess && (
+        <span className="flex items-center gap-1 text-sm font-medium text-teal-600 shrink-0">
+          <CheckIcon /> Customization applied
+        </span>
+      )}
+      {!applySuccess && saveSuccess && (
         <span className="flex items-center gap-1 text-sm font-medium text-green-600 shrink-0">
           <CheckIcon /> Autosaved
         </span>
@@ -239,12 +244,14 @@ function BuilderHeader({ user, isSaving, saveSuccess, onSave, onCustomize, onLog
    Main Builder
    ══════════════════════════════════════════ */
 export default function Builder() {
-  const [resumeData, setResumeData]     = useState(DefaultResumeData);
+  const [resumeData, setResumeData]       = useState(DefaultResumeData);
   const [activeSection, setActiveSection] = useState('personal');
-  const [aiPanelView, setAiPanelView]   = useState(null);
-  const [mobileTab, setMobileTab]       = useState('edit');
-  const [isSaving, setIsSaving]         = useState(false);
-  const [saveSuccess, setSaveSuccess]   = useState(false);
+  const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);   // controls mounting
+  const [aiForceView,   setAiForceView]   = useState(null);    // jump-to view on open
+  const [mobileTab, setMobileTab]         = useState('edit');
+  const [isSaving, setIsSaving]           = useState(false);
+  const [saveSuccess, setSaveSuccess]     = useState(false);
+  const [applySuccess, setApplySuccess]   = useState(false);
   const { user, logout }                = useAuth();
   const router                          = useRouter();
 
@@ -289,7 +296,14 @@ export default function Builder() {
     setResumeData(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
   /* ─── AI callback — apply customised data to preview ─── */
-  const handleCustomized = (customizedData) => setResumeData(customizedData);
+  const handleCustomized = (customizedData) => {
+    setResumeData(customizedData);
+    setApplySuccess(true);
+    setTimeout(() => setApplySuccess(false), 4000);
+  };
+
+  const openAiPanel = () => { setIsAiPanelOpen(true); setAiForceView('form'); setMobileTab('ai'); };
+  const closeAiPanel = () => { setIsAiPanelOpen(false); setAiForceView(null); setMobileTab('edit'); };
 
   /* ─── logout ─── */
   const handleLogout = async () => {
@@ -306,8 +320,9 @@ export default function Builder() {
           user={user}
           isSaving={isSaving}
           saveSuccess={saveSuccess}
+          applySuccess={applySuccess}
           onSave={handleSaveDefault}
-          onCustomize={() => { setAiPanelView('form'); setMobileTab('ai'); }}
+          onCustomize={openAiPanel}
           onLogout={handleLogout}
         />
 
@@ -353,15 +368,18 @@ export default function Builder() {
             <Preview />
           </div>
 
-          {/* 4 · AI assistant — only rendered when open */}
-          {aiPanelView !== null && (
-            <AIPanel
-              resumeData={resumeData}
-              onCustomized={handleCustomized}
-              forceView={aiPanelView}
-              setForceView={setAiPanelView}
-              onClose={() => { setAiPanelView(null); setMobileTab('edit'); }}
-            />
+          {/* 4 · AI assistant drawer — only rendered when open */}
+          {isAiPanelOpen && (
+            <>
+              <div className="ai-drawer-scrim exclude-print" onClick={closeAiPanel} />
+              <AIPanel
+                resumeData={resumeData}
+                onCustomized={handleCustomized}
+                forceView={aiForceView}
+                setForceView={setAiForceView}
+                onClose={closeAiPanel}
+              />
+            </>
           )}
 
         </div>

@@ -1,8 +1,93 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { customizeResume } from '../services/customizeService';
 import { FiEdit2, FiChevronRight, FiX, FiZap, FiEye } from 'react-icons/fi';
+
+/* ─── animated loading steps ─── */
+const LOADING_STEPS = [
+  { label: 'Reading job requirements…',    pct: 15 },
+  { label: 'Scanning your resume…',         pct: 35 },
+  { label: 'Matching ATS keywords…',        pct: 55 },
+  { label: 'Calculating match score…',      pct: 72 },
+  { label: 'Generating improvements…',      pct: 88 },
+  { label: 'Finalising results…',           pct: 96 },
+];
+
+function LoadingView() {
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() =>
+      setStep(prev => Math.min(prev + 1, LOADING_STEPS.length - 1)),
+    1600);
+    return () => clearInterval(id);
+  }, []);
+
+  const { label, pct } = LOADING_STEPS[step];
+
+  return (
+    <div className="flex flex-col items-center justify-center flex-1 p-8 gap-6 ai-panel-body">
+      {/* Spinner with sparkle centre */}
+      <div style={{ position: 'relative', width: 72, height: 72 }}>
+        <svg
+          style={{ position: 'absolute', inset: 0, animation: 'spin 1.1s linear infinite' }}
+          width="72" height="72" viewBox="0 0 72 72"
+        >
+          <circle cx="36" cy="36" r="30" fill="none" stroke="#CCFBF1" strokeWidth="5" />
+          <circle
+            cx="36" cy="36" r="30" fill="none" stroke="#0D9488" strokeWidth="5"
+            strokeDasharray="188" strokeDashoffset="140"
+            strokeLinecap="round"
+          />
+        </svg>
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <SparkleIcon size={22} />
+        </div>
+      </div>
+
+      {/* Title + animated step label */}
+      <div className="text-center">
+        <p className="text-sm font-bold text-gray-900 mb-1">Customising your resume</p>
+        <p
+          key={step}
+          className="text-xs text-gray-500"
+          style={{ animation: 'fadeSlideIn 300ms ease-out' }}
+        >
+          {label}
+        </p>
+      </div>
+
+      {/* Progress bar */}
+      <div style={{
+        width: '100%', height: 5,
+        background: '#F3F4F6', borderRadius: 999, overflow: 'hidden',
+      }}>
+        <div style={{
+          height: '100%',
+          width: `${pct}%`,
+          background: 'linear-gradient(90deg, #0D9488, #14B8A6)',
+          borderRadius: 999,
+          transition: 'width 1.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        }} />
+      </div>
+
+      {/* Step dots */}
+      <div style={{ display: 'flex', gap: '0.375rem' }}>
+        {LOADING_STEPS.map((_, i) => (
+          <div key={i} style={{
+            width: 6, height: 6, borderRadius: '50%',
+            background: i <= step ? '#0D9488' : '#E5E7EB',
+            transition: 'background 0.3s ease',
+          }} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 /* ─── circular match-score gauge ─── */
 function MatchGauge({ score }) {
@@ -178,13 +263,7 @@ export default function AIPanel({ resumeData, onCustomized, forceView, setForceV
       <div className="ai-panel-header">
         <h2 className="ai-panel-title"><SparkleIcon /> AI Assistant</h2>
       </div>
-      <div className="flex flex-col items-center justify-center flex-1 p-6 gap-4 ai-panel-body">
-        <div className="w-11 h-11 rounded-full border-[3px] border-teal-100 border-t-teal-600 animate-spin" />
-        <div className="text-center">
-          <p className="text-sm font-semibold text-gray-900">Analysing your resume…</p>
-          <p className="text-xs text-gray-500 mt-1">AI is comparing with the job description</p>
-        </div>
-      </div>
+      <LoadingView />
     </aside>
   );
 
