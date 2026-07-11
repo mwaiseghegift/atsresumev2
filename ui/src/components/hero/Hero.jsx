@@ -1,5 +1,8 @@
 import Link from "next/link";
 import FAQAccordion from "./FAQAccordion";
+import LandingNavAuth from "./LandingNavAuth";
+import LandingFooterCtaAuth from "./LandingFooterCtaAuth";
+import LandingFooterAccountLinks from "./LandingFooterAccountLinks";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Inline SVG icons — no external dependency
@@ -164,28 +167,8 @@ function LandingNav() {
         </nav>
 
         {/* Auth */}
-        <div className="flex items-center gap-3 ml-auto shrink-0">
-          <Link
-            href="/login"
-            className="hidden sm:block text-sm font-medium transition-colors"
-            style={{ color: "rgba(255,255,255,0.58)" }}
-          >
-            Sign in
-          </Link>
-          <Link
-            href="/register"
-            className="hidden sm:block text-sm font-medium border rounded-lg px-3.5 py-1.5 transition-colors"
-            style={{ color: "rgba(255,255,255,0.75)", borderColor: "rgba(255,255,255,0.12)" }}
-          >
-            Register
-          </Link>
-          <Link
-            href="/builder"
-            className="px-4 py-2 rounded-xl text-sm font-bold text-white transition-all hover:-translate-y-px hover:opacity-90"
-            style={{ background: "linear-gradient(135deg,#0D9488,#0F766E)", boxShadow: "0 2px 12px rgba(13,148,136,0.4)" }}
-          >
-            Get started free
-          </Link>
+        <div className="ml-auto">
+          <LandingNavAuth />
         </div>
       </div>
     </header>
@@ -1043,13 +1026,7 @@ function FooterCTA() {
           >
             Build my resume free {Ico.arrow}
           </Link>
-          <Link
-            href="/register"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-semibold text-sm transition-all hover:-translate-y-0.5"
-            style={{ border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.75)", backgroundColor: "rgba(255,255,255,0.04)" }}
-          >
-            Create free account
-          </Link>
+          <LandingFooterCtaAuth />
         </div>
 
         <div className="flex flex-wrap justify-center gap-6 text-xs font-medium relative" style={{ color: "rgba(255,255,255,0.35)" }}>
@@ -1085,10 +1062,8 @@ const FOOTER_LINKS = [
   },
   {
     title: "Account",
-    links: [
-      { label: "Sign in", href: "/login" },
-      { label: "Register free", href: "/register" },
-    ],
+    dynamic: true, // rendered by LandingFooterAccountLinks — auth-state-aware, not a static link list
+    links: [],
   },
   {
     title: "Legal",
@@ -1144,10 +1119,11 @@ function SiteFooter() {
 
           {/* Links */}
           <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-8">
-            {FOOTER_LINKS.map(({ title, links }) => (
+            {FOOTER_LINKS.map(({ title, links, dynamic }) => (
               <nav key={title} aria-label={`${title} links`}>
                 <p className="text-xs font-bold uppercase tracking-wider text-white mb-4">{title}</p>
                 <ul className="space-y-2.5 list-none p-0">
+                  {dynamic && <LandingFooterAccountLinks />}
                   {links.map(({ label, href, anchor }) => (
                     <li key={label}>
                       {anchor ? (
