@@ -194,7 +194,12 @@ function BuilderHeader({ user, authLoading, isSaving, saveSuccess, applySuccess,
         >
           Builder
         </span>
-        <span className="px-3 py-1.5 text-sm font-medium text-gray-400 cursor-not-allowed">Job Tracker</span>
+        <Link
+          href="/dashboard/jobs"
+          className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+        >
+          Job Tracker
+        </Link>
         <button
           type="button"
           onClick={onOpenTemplates}

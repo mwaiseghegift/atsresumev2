@@ -7,6 +7,7 @@ export const API_CUSTOMIZE = "/api/customize/";
 export const API_QUICK_CUSTOMIZE = "/api/quick-customize/";
 export const API_EXPORT_PDF = "/api/export-pdf/";
 export const API_RESUMES = "/api/resumes/";
+export const API_JOB_DESCRIPTIONS = "/api/job-descriptions/";
 export const API_CUSTOMIZED_RESUMES = "/api/customized-resumes/";
 export const API_AUTH_ME = "/api/auth/me/";
 export const API_AUTH_LOGIN = "/api/auth/login/";

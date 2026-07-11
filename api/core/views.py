@@ -31,7 +31,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
 
 class JobDescriptionViewSet(viewsets.ModelViewSet):
-    """ViewSet for JobDescription CRUD operations"""
+    """ViewSet for JobDescription CRUD operations — also the Job Tracker API"""
     queryset = JobDescription.objects.all()
     serializer_class = JobDescriptionSerializer
 
@@ -39,6 +39,12 @@ class JobDescriptionViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             return self.queryset.filter(user=self.request.user)
         return self.queryset.filter(user__isnull=True)
+
+    def perform_create(self, serializer):
+        if self.request.user.is_authenticated:
+            serializer.save(user=self.request.user)
+        else:
+            serializer.save()
 
 
 class CustomizedResumeViewSet(viewsets.ReadOnlyModelViewSet):

@@ -11,11 +11,15 @@ class ResumeSerializer(serializers.ModelSerializer):
 
 
 class JobDescriptionSerializer(serializers.ModelSerializer):
-    """Serializer for JobDescription model"""
+    """Serializer for JobDescription model — also the Job Tracker entity"""
     class Meta:
         model = JobDescription
-        fields = ['id', 'title', 'company', 'description', 'requirements', 'created_at']
-        read_only_fields = ['id', 'created_at']
+        fields = [
+            'id', 'title', 'company', 'description', 'requirements',
+            'status', 'job_url', 'applied_date', 'interview_date', 'notes',
+            'created_at', 'updated_at',
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
 
 
 class CustomizedResumeSerializer(serializers.ModelSerializer):

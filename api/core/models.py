@@ -22,17 +22,33 @@ class Resume(models.Model):
 
 
 class JobDescription(models.Model):
-    """Model to store job descriptions"""
+    """Model to store job descriptions — also the Job Tracker entity: a
+    JobDescription is created either as a side effect of AI resume
+    customization, or directly by a user tracking an application manually."""
+
+    class Status(models.TextChoices):
+        SAVED = 'saved', 'Saved'
+        APPLIED = 'applied', 'Applied'
+        INTERVIEWING = 'interviewing', 'Interviewing'
+        OFFER = 'offer', 'Offer'
+        REJECTED = 'rejected', 'Rejected'
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='job_descriptions', null=True, blank=True)
     title = models.CharField(max_length=255)
     company = models.CharField(max_length=255, blank=True)
-    description = models.TextField(help_text="Full job description text")
+    description = models.TextField(blank=True, help_text="Full job description text")
     requirements = models.TextField(blank=True, help_text="Specific job requirements")
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.SAVED)
+    job_url = models.URLField(max_length=500, blank=True, help_text="Link to the original job posting")
+    applied_date = models.DateField(null=True, blank=True)
+    interview_date = models.DateField(null=True, blank=True)
+    notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.title} at {self.company}" if self.company else self.title
-    
+
     class Meta:
         ordering = ['-created_at']
 
