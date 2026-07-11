@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx next *)",
+      "PowerShell(Get-Process -Name \"node\" -ErrorAction SilentlyContinue)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3000/login\" -UseBasicParsing -TimeoutSec 5)"
+    ]
+  }
+}

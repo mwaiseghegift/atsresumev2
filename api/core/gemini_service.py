@@ -77,6 +77,26 @@ Your task is to customize and optimize a resume for a specific job posting. Anal
   * WRONG: "Developed _robust_ solutions"
   * CORRECT: "Developed robust solutions"
 
+**CRITICAL: Write Like a Human, Not an AI Resume Generator**
+Recruiters and ATS reviewers can spot AI-generated resume text instantly. Generic buzzwords and template phrasing actively hurt credibility. Every sentence must read like it was written by the candidate describing what they actually did.
+
+Never use these buzzwords/filler words, in the summary, descriptions, or achievements:
+leverage, streamline, optimize (as vague filler, not a technical term), maximize, unlock, unleash, utilize, facilitate, foster, cultivate, empower, enable, spearhead, synergy, robust, dynamic, agile, seamless, holistic, comprehensive, cutting-edge, next-gen, game-changing, world-class, best-in-class, revolutionary, disruptive, innovative (as a filler adjective), scalable (without a number attached), transformative, elevate, delve, essentially, certainly, various (list the actual things instead)
+
+Never use these resume-cliché phrases:
+"results-driven professional", "proven track record", "detail-oriented team player", "self-starter", "go-getter", "passionate about", "hardworking individual", "wide range of", "responsible for" (as a bullet opener; start with what was actually done instead), "duties included", "in charge of", "worked closely with" (say what the collaboration produced instead), "played a key role in", "helped drive", "actionable insights", "move the needle", "at scale" (without a number), "best practices" (unless naming the specific practice)
+
+Structural rules:
+- No em dashes anywhere. Use commas or periods instead
+- Do not open the summary or two bullets in a row with the same word or a stacked list of adjectives (e.g. "Dynamic, results-driven, detail-oriented professional..." is banned; state one concrete fact instead)
+- Do not use passive voice where an active sentence with a real subject and verb would be stronger. NOT "Was responsible for managing a team" but "Managed a team of 6 engineers"
+- Vary the action verb that opens each achievement bullet. Do not reuse the same power verb (e.g. "Led") across multiple bullets in the same role
+- Cut runway phrases. Do not preface an achievement with vague hype before the actual detail; open directly with the specific action and result
+- Be concrete: prefer a real number, tool name, team size, timeframe, or dollar amount over an abstract claim. If the original resume has a number, keep it. Do not invent numbers that were not in the original data.
+- If a claim can't be made specific with what's in the original resume, state it plainly and simply rather than dressing it up with a buzzword
+
+Test for every sentence you write: could this exact sentence appear on literally any other candidate's resume for this role? If yes, rewrite it using the specific companies, tools, numbers, or scope already present in the original resume data.
+
 **Instructions:**
 1. Analyze the job description and identify key skills, qualifications, and requirements
 2. Optimize the resume by:
@@ -123,7 +143,7 @@ Your task is to customize and optimize a resume for a specific job posting. Anal
     //   "endYear": "YYYY-MM"
     // }}
   }},
-  "customization_notes": "Detailed explanation of the customizations made and strategic recommendations",
+  "customization_notes": "Plain, specific explanation of what was changed and why, in the same non-buzzword human voice as the resume content itself. No 'leverage', 'streamline', or other filler",
   "match_score": 85,
   "keywords_analysis": {{
     "matched": ["keyword1", "keyword2"],

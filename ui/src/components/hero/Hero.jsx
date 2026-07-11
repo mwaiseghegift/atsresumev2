@@ -64,6 +64,11 @@ const Ico = {
       <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
     </svg>
   ),
+  lightbulb: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9 18h6M10 22h4M15.09 14c.36-.55.63-1.1.91-1.65A5.5 5.5 0 1 0 8 12.35c.28.55.55 1.1.91 1.65A2.5 2.5 0 0 1 10 16h4a2.5 2.5 0 0 1 1.09-2z"/>
+    </svg>
+  ),
   user: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
@@ -198,31 +203,14 @@ function HeroSection() {
       className="relative overflow-hidden"
       style={{ paddingTop: "100px", paddingBottom: "80px", minHeight: "100vh", display: "flex", alignItems: "center" }}
     >
-      {/* Background layers */}
+      {/* Background layer — subtle dot grid texture, no decorative glow */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {/* Dot grid */}
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: "radial-gradient(rgba(13,148,136,0.06) 1px, transparent 1px)",
             backgroundSize: "32px 32px",
           }}
-        />
-        {/* Teal glow top-right */}
-        <div className="absolute" style={{
-          top: "5%", right: "5%", width: "600px", height: "600px",
-          background: "radial-gradient(circle, rgba(13,148,136,0.16) 0%, transparent 65%)",
-          filter: "blur(50px)",
-        }} />
-        {/* Purple glow bottom-left */}
-        <div className="absolute" style={{
-          bottom: "10%", left: "5%", width: "450px", height: "450px",
-          background: "radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 65%)",
-          filter: "blur(50px)",
-        }} />
-        {/* Thin top accent line */}
-        <div className="absolute top-0 left-1/4 right-1/4 h-px"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(13,148,136,0.5), transparent)" }}
         />
       </div>
 
@@ -240,7 +228,7 @@ function HeroSection() {
             >
               Build a resume that{" "}
               <span style={{
-                background: "linear-gradient(135deg,#14B8A6 0%,#0D9488 50%,#6366F1 100%)",
+                background: "linear-gradient(135deg,#14B8A6,#0D9488)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
               }}>
                 beats the algorithm
@@ -393,7 +381,7 @@ function HeroPreviewCard() {
               <div className="flex flex-wrap gap-1" aria-hidden="true">
                 {["React", "Node.js", "Python", "AWS", "SQL", "TypeScript"].map((s) => (
                   <span key={s} className="text-[7px] font-medium px-1.5 py-0.5 rounded"
-                    style={{ backgroundColor: "#EFF6FF", color: "#1D4ED8" }}>
+                    style={{ backgroundColor: "#F1F5F9", color: "#475569" }}>
                     {s}
                   </span>
                 ))}
@@ -507,33 +495,24 @@ function MetricsBar() {
 const FEATURES = [
   {
     badge: "Score before you apply",
-    badgeBg: "#ECFDF5", badgeText: "#065F46",
-    iconBg: "linear-gradient(135deg,#ECFDF5,#D1FAE5)", iconColor: "#059669",
     Icon: "chart",
     title: "Know your ATS score instantly",
     desc: "Get an ATS match score for any job description so you know exactly how competitive your resume is before you click apply.",
-    stat: "87%", statLabel: "Average match score improvement", statColor: "#0D9488",
-    accentColor: "#0D9488",
+    stat: "87%", statLabel: "Average match score improvement",
   },
   {
     badge: "AI-tailored in seconds",
-    badgeBg: "#EEF2FF", badgeText: "#3730A3",
-    iconBg: "linear-gradient(135deg,#EEF2FF,#E0E7FF)", iconColor: "#4F46E5",
     Icon: "cpu",
     title: "Let AI rewrite it for the role",
     desc: "Gemini AI rewrites your summary, skills, and work experience to match the job's exact requirements — without inventing anything.",
-    stat: "3×", statLabel: "Faster resume customization", statColor: "#6366F1",
-    accentColor: "#6366F1",
+    stat: "3×", statLabel: "Faster resume customization",
   },
   {
     badge: "Clean & recruiter-ready",
-    badgeBg: "#FFF7ED", badgeText: "#9A3412",
-    iconBg: "linear-gradient(135deg,#FFF7ED,#FFEDD5)", iconColor: "#EA580C",
     Icon: "file",
     title: "Export a clean, ATS-safe PDF",
     desc: "Download a professional, formatting-safe PDF that any ATS can parse and any recruiter will love.",
-    stat: "100%", statLabel: "ATS-safe formatting guaranteed", statColor: "#EA580C",
-    accentColor: "#EA580C",
+    stat: "100%", statLabel: "ATS-safe formatting guaranteed",
   },
 ];
 
@@ -563,28 +542,28 @@ function FeaturesSection() {
 
         {/* Cards */}
         <ul className="grid grid-cols-1 md:grid-cols-3 gap-6 list-none p-0">
-          {FEATURES.map(({ badge, badgeBg, badgeText, iconBg, iconColor, Icon, title, desc, stat, statLabel, statColor, accentColor }) => (
+          {FEATURES.map(({ badge, Icon, title, desc, stat, statLabel }) => (
             <li
               key={title}
               className="bg-white rounded-2xl p-7 flex flex-col"
               style={{
                 border: "1px solid #E2E8F0",
                 boxShadow: "0 1px 8px rgba(0,0,0,0.06)",
-                borderTop: `3px solid ${accentColor}`,
+                borderTop: "3px solid #0D9488",
               }}
             >
               <span
                 className="inline-block text-[11px] font-bold px-3 py-1 rounded-full mb-5 self-start uppercase tracking-wide"
-                style={{ backgroundColor: badgeBg, color: badgeText }}
+                style={{ backgroundColor: "#ECFDF5", color: "#065F46" }}
               >
                 {badge}
               </span>
               <div
                 className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 shrink-0"
-                style={{ background: iconBg }}
+                style={{ background: "linear-gradient(135deg,#ECFDF5,#D1FAE5)" }}
                 aria-hidden="true"
               >
-                <span style={{ color: iconColor }}>{iconMap[Icon]}</span>
+                <span style={{ color: "#0D9488" }}>{iconMap[Icon]}</span>
               </div>
               <h3 className="font-bold text-lg mb-3 leading-snug" style={{ color: "#0F172A" }}>
                 {title}
@@ -593,7 +572,7 @@ function FeaturesSection() {
                 {desc}
               </p>
               <div className="mt-7 pt-6" style={{ borderTop: "1px solid #F1F5F9" }}>
-                <p className="text-3xl font-black leading-none" style={{ color: statColor }}>{stat}</p>
+                <p className="text-3xl font-black leading-none" style={{ color: "#0D9488" }}>{stat}</p>
                 <p className="text-xs mt-1 font-medium" style={{ color: "#94A3B8" }}>{statLabel}</p>
               </div>
             </li>
@@ -723,18 +702,18 @@ function AIShowcase() {
         {/* Checkmarks */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4" role="list" aria-label="AI improvements">
           {[
-            { label: "Stronger action verbs", color: "#0D9488" },
-            { label: "Relevant keywords added", color: "#6366F1" },
-            { label: "Cleaner ATS phrasing", color: "#0D9488" },
-            { label: "Role-focused summary", color: "#6366F1" },
-          ].map(({ label, color }) => (
+            "Stronger action verbs",
+            "Relevant keywords added",
+            "Cleaner ATS phrasing",
+            "Role-focused summary",
+          ].map((label) => (
             <div
               key={label}
               className="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium"
               style={{ backgroundColor: "#0C1A2C", border: "1px solid rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.72)" }}
               role="listitem"
             >
-              <span style={{ color }}>{Ico.check}</span>
+              <span style={{ color: "#14B8A6" }}>{Ico.check}</span>
               {label}
             </div>
           ))}
@@ -749,10 +728,10 @@ function AIShowcase() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const HOW_STEPS = [
-  { n: "01", title: "Build or paste your resume", desc: "Start fresh or paste your existing content. Add experience, skills, and education in our guided editor.", iconKey: "edit", color: "#0D9488" },
-  { n: "02", title: "Paste the job description", desc: "Drop in the full job posting. The AI extracts key requirements and keywords automatically.", iconKey: "file", color: "#6366F1" },
-  { n: "03", title: "Review AI suggestions & score", desc: "See your tailored resume and ATS match score side by side. Accept or refine any change.", iconKey: "chart", color: "#F59E0B" },
-  { n: "04", title: "Download your optimized resume", desc: "Export a clean, ATS-friendly PDF that's ready to impress recruiters immediately.", iconKey: "download", color: "#10B981" },
+  { n: "01", title: "Build or paste your resume", desc: "Start fresh or paste your existing content. Add experience, skills, and education in our guided editor.", iconKey: "edit" },
+  { n: "02", title: "Paste the job description", desc: "Drop in the full job posting. The AI extracts key requirements and keywords automatically.", iconKey: "file" },
+  { n: "03", title: "Review AI suggestions & score", desc: "See your tailored resume and ATS match score side by side. Accept or refine any change.", iconKey: "chart" },
+  { n: "04", title: "Download your optimized resume", desc: "Export a clean, ATS-friendly PDF that's ready to impress recruiters immediately.", iconKey: "download" },
 ];
 
 function HowItWorks() {
@@ -776,21 +755,21 @@ function HowItWorks() {
         </div>
 
         <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 list-none p-0 mb-12">
-          {HOW_STEPS.map(({ n, title, desc, iconKey, color }) => (
+          {HOW_STEPS.map(({ n, title, desc, iconKey }) => (
             <li key={n}>
               <div
                 className="bg-white rounded-2xl p-6 h-full"
-                style={{ border: "1px solid #E2E8F0", boxShadow: "0 1px 6px rgba(0,0,0,0.05)", borderLeft: `4px solid ${color}` }}
+                style={{ border: "1px solid #E2E8F0", boxShadow: "0 1px 6px rgba(0,0,0,0.05)", borderLeft: "4px solid #0D9488" }}
               >
                 <div className="flex items-center gap-3 mb-4">
                   <span
                     className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-white text-sm shrink-0"
-                    style={{ background: `linear-gradient(135deg,${color}dd,${color}99)` }}
+                    style={{ background: "linear-gradient(135deg,#0D9488,#0F766E)" }}
                     aria-label={`Step ${n}`}
                   >
                     {n}
                   </span>
-                  <span style={{ color }}>{iconMap[iconKey]}</span>
+                  <span style={{ color: "#0D9488" }}>{iconMap[iconKey]}</span>
                 </div>
                 <h3 className="font-bold text-sm mb-2 leading-snug" style={{ color: "#0F172A" }}>
                   {title}
@@ -822,10 +801,10 @@ function HowItWorks() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const SCORE_BARS = [
-  { label: "Keyword match",       value: 87, display: "28 / 32", color: "#0D9488" },
-  { label: "Formatting safety",   value: 98, display: "98%",     color: "#6366F1" },
-  { label: "Role alignment",      value: 90, display: "90%",     color: "#F59E0B" },
-  { label: "Experience relevance",value: 85, display: "85%",     color: "#10B981" },
+  { label: "Keyword match",       value: 87, display: "28 / 32" },
+  { label: "Formatting safety",   value: 98, display: "98%" },
+  { label: "Role alignment",      value: 90, display: "90%" },
+  { label: "Experience relevance",value: 85, display: "85%" },
 ];
 
 const SCORE_POINTS = [
@@ -878,7 +857,7 @@ function ATSScoreSection() {
 
           {/* Bars */}
           <div className="space-y-4">
-            {SCORE_BARS.map(({ label, value, display, color }) => (
+            {SCORE_BARS.map(({ label, value, display }) => (
               <div key={label}>
                 <div className="flex justify-between text-xs mb-1.5">
                   <span style={{ color: "rgba(255,255,255,0.55)" }}>{label}</span>
@@ -889,7 +868,7 @@ function ATSScoreSection() {
                   style={{ backgroundColor: "rgba(255,255,255,0.07)" }}
                   role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={100} aria-label={`${label}: ${display}`}
                 >
-                  <div className="h-full rounded-full" style={{ width: `${value}%`, backgroundColor: color }}/>
+                  <div className="h-full rounded-full" style={{ width: `${value}%`, backgroundColor: "#0D9488" }}/>
                 </div>
               </div>
             ))}
@@ -942,7 +921,7 @@ function ATSScoreSection() {
             className="flex items-start gap-3 p-4 rounded-xl text-sm"
             style={{ backgroundColor: "rgba(13,148,136,0.07)", border: "1px solid rgba(13,148,136,0.20)" }}
           >
-            <span className="text-lg shrink-0" aria-hidden="true">💡</span>
+            <span className="shrink-0 mt-0.5" style={{ color: "#14B8A6" }} aria-hidden="true">{Ico.lightbulb}</span>
             <p style={{ color: "rgba(255,255,255,0.65)" }}>
               Aim for{" "}
               <strong className="text-white">80%+</strong>{" "}
@@ -1023,13 +1002,6 @@ function FooterCTA() {
     <section aria-labelledby="cta-heading" className="py-28" style={{ backgroundColor: "#030A14" }}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
 
-        {/* Glow */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at 50% 60%, rgba(13,148,136,0.14) 0%, transparent 65%)" }}
-          aria-hidden="true"
-        />
-
         {/* Icon */}
         <div
           className="w-16 h-16 rounded-2xl mx-auto mb-8 flex items-center justify-center relative"
@@ -1052,7 +1024,7 @@ function FooterCTA() {
         >
           Create a better resume for{" "}
           <span style={{
-            background: "linear-gradient(135deg,#14B8A6,#6366F1)",
+            background: "linear-gradient(135deg,#14B8A6,#0D9488)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
           }}>
             your next application

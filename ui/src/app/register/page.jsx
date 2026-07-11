@@ -5,10 +5,43 @@ import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+const EyeIcon = (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+const EyeOffIcon = (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.6 18.6 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.6 18.6 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+    <line x1="1" y1="1" x2="23" y2="23" />
+  </svg>
+);
+
+const UserIcon = (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
+const MailIcon = (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 6-10 7L2 6" />
+  </svg>
+);
+
+const LockIcon = (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" />
+  </svg>
+);
+
 export default function RegisterPage() {
   const [username, setUsername] = useState('');
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError]       = useState(null);
   const [loading, setLoading]   = useState(false);
   const { register } = useAuth();
@@ -67,64 +100,89 @@ export default function RegisterPage() {
               <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1.5">
                 Username
               </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                autoComplete="username"
-                className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg placeholder-gray-400 transition-all"
-                style={{ outline: 'none', ...blurStyle }}
-                placeholder="choose_a_username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                onFocus={(e) => Object.assign(e.target.style, focusStyle)}
-                onBlur={(e) => Object.assign(e.target.style, blurStyle)}
-              />
+              <div className="relative">
+                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                  {UserIcon}
+                </span>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  required
+                  autoFocus
+                  autoComplete="username"
+                  className="w-full pl-10 pr-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg placeholder-gray-400 transition-all"
+                  style={{ outline: 'none', ...blurStyle }}
+                  placeholder="choose_a_username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  onFocus={(e) => Object.assign(e.target.style, focusStyle)}
+                  onBlur={(e) => Object.assign(e.target.style, blurStyle)}
+                />
+              </div>
             </div>
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
                 Email address
               </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg placeholder-gray-400 transition-all"
-                style={{ outline: 'none', ...blurStyle }}
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onFocus={(e) => Object.assign(e.target.style, focusStyle)}
-                onBlur={(e) => Object.assign(e.target.style, blurStyle)}
-              />
+              <div className="relative">
+                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                  {MailIcon}
+                </span>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  className="w-full pl-10 pr-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg placeholder-gray-400 transition-all"
+                  style={{ outline: 'none', ...blurStyle }}
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onFocus={(e) => Object.assign(e.target.style, focusStyle)}
+                  onBlur={(e) => Object.assign(e.target.style, blurStyle)}
+                />
+              </div>
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
                 Password
               </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                autoComplete="new-password"
-                className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg placeholder-gray-400 transition-all"
-                style={{ outline: 'none', ...blurStyle }}
-                placeholder="Create a strong password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onFocus={(e) => Object.assign(e.target.style, focusStyle)}
-                onBlur={(e) => Object.assign(e.target.style, blurStyle)}
-              />
+              <div className="relative">
+                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                  {LockIcon}
+                </span>
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  autoComplete="new-password"
+                  className="w-full pl-10 pr-11 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg placeholder-gray-400 transition-all"
+                  style={{ outline: 'none', ...blurStyle }}
+                  placeholder="Create a strong password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onFocus={(e) => Object.assign(e.target.style, focusStyle)}
+                  onBlur={(e) => Object.assign(e.target.style, blurStyle)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? EyeOffIcon : EyeIcon}
+                </button>
+              </div>
             </div>
 
             {error && (
-              <div className="flex items-start gap-2.5 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3.5 py-2.5">
+              <div role="alert" className="flex items-start gap-2.5 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3.5 py-2.5">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-0.5">
                   <circle cx="12" cy="12" r="10" />
                   <line x1="12" y1="8" x2="12" y2="12" />
