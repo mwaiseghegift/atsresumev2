@@ -21,6 +21,8 @@ import Skills from "../components/form/components/skills/ui/Skills";
 import Languages from "../components/form/components/languages/ui/Languages";
 import TestsAndCertifications from "../components/form/components/testsAndCertifications/ui/TestsAndCertifications";
 import LoadUnload from "../components/form/components/LoadUnload";
+import TemplatePickerModal from "../components/TemplatePickerModal";
+import { DEFAULT_TEMPLATE_ID, getTemplate } from "../constants/templates";
 
 const Print = dynamic(() => import("../components/utility/WinPrint"), { ssr: false });
 
@@ -32,6 +34,7 @@ const BLANK_RESUME = {
 };
 
 const LS_KEY = 'atsresume_draft';
+const LS_TEMPLATE_KEY = 'atsresume_template';
 
 export const ResumeContext = createContext(BLANK_RESUME);
 
@@ -149,7 +152,7 @@ function SaveIcon() {
 }
 
 /* ─── builder-specific top header ─── */
-function BuilderHeader({ user, authLoading, isSaving, saveSuccess, applySuccess, onSave, onCustomize, onLogout, onClear }) {
+function BuilderHeader({ user, authLoading, isSaving, saveSuccess, applySuccess, onSave, onCustomize, onLogout, onClear, activeTemplateName, onOpenTemplates }) {
   const initials = user?.username?.slice(0, 2).toUpperCase() ?? '';
 
   return (
@@ -192,7 +195,14 @@ function BuilderHeader({ user, authLoading, isSaving, saveSuccess, applySuccess,
           Builder
         </span>
         <span className="px-3 py-1.5 text-sm font-medium text-gray-400 cursor-not-allowed">Job Tracker</span>
-        <span className="px-3 py-1.5 text-sm font-medium text-gray-400 cursor-not-allowed">Templates</span>
+        <button
+          type="button"
+          onClick={onOpenTemplates}
+          className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+          title={`Current template: ${activeTemplateName}`}
+        >
+          Templates
+        </button>
       </nav>
 
       {/* Spacer */}
@@ -283,6 +293,10 @@ function BuilderHeader({ user, authLoading, isSaving, saveSuccess, applySuccess,
    ══════════════════════════════════════════ */
 export default function Builder() {
   const [resumeData, setResumeData] = useState(BLANK_RESUME);
+  const [template, setTemplate] = useState(DEFAULT_TEMPLATE_ID);
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
+  const [zoomMode, setZoomMode] = useState('100'); // '100' = true, PDF-matching size | 'fit' = scaled to panel width
+  const [fitScalePercent, setFitScalePercent] = useState(100);
   const [activeSection, setActiveSection] = useState('personal');
   const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);   // controls mounting
   const [aiForceView, setAiForceView] = useState(null);    // jump-to view on open
@@ -298,6 +312,8 @@ export default function Builder() {
     try {
       const saved = window.localStorage.getItem(LS_KEY);
       if (saved) setResumeData(JSON.parse(saved));
+      const savedTemplate = window.localStorage.getItem(LS_TEMPLATE_KEY);
+      if (savedTemplate) setTemplate(savedTemplate);
     } catch {/* quota exceeded or private mode */ }
   }, []);
 
@@ -310,6 +326,11 @@ export default function Builder() {
     }, 800);
     return () => clearTimeout(draftTimer.current);
   }, [resumeData]);
+
+  /* Persist template choice immediately — it's a single value, no need to debounce */
+  useEffect(() => {
+    try { window.localStorage.setItem(LS_TEMPLATE_KEY, template); } catch {/* quota or private mode */ }
+  }, [template]);
 
   const completeness = useMemo(() => calcCompleteness(resumeData), [resumeData]);
   const activeSectionMeta = SECTIONS.find(s => s.id === activeSection);
@@ -324,7 +345,7 @@ export default function Builder() {
       const res = await fetch('http://localhost:8000/api/resumes/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
-        body: JSON.stringify({ resume_data: resumeData }),
+        body: JSON.stringify({ resume_data: resumeData, template }),
         credentials: 'include',
       });
       if (res.ok) {
@@ -363,8 +384,12 @@ export default function Builder() {
 
   const handleClearDraft = () => {
     if (!window.confirm('Clear the current draft and start with a blank resume?')) return;
-    try { window.localStorage.removeItem(LS_KEY); } catch {/* ignore */ }
+    try {
+      window.localStorage.removeItem(LS_KEY);
+      window.localStorage.removeItem(LS_TEMPLATE_KEY);
+    } catch {/* ignore */ }
     setResumeData(BLANK_RESUME);
+    setTemplate(DEFAULT_TEMPLATE_ID);
   };
 
   /* ─── logout ─── */
@@ -373,8 +398,10 @@ export default function Builder() {
     router.push('/');
   };
 
+  const activeTemplate = getTemplate(template);
+
   return (
-    <ResumeContext.Provider value={{ resumeData, setResumeData, handleProfilePicture, handleChange }}>
+    <ResumeContext.Provider value={{ resumeData, setResumeData, handleProfilePicture, handleChange, template, zoomMode, onFitScaleChange: setFitScalePercent }}>
       <div className="builder-layout-container">
 
         {/* ── Full builder navbar ── */}
@@ -388,6 +415,8 @@ export default function Builder() {
           onCustomize={openAiPanel}
           onLogout={handleLogout}
           onClear={handleClearDraft}
+          activeTemplateName={activeTemplate.name}
+          onOpenTemplates={() => setIsTemplatePickerOpen(true)}
         />
 
         {/* ── 3-column workspace ── */}
@@ -425,8 +454,16 @@ export default function Builder() {
             <div className="preview-panel-header exclude-print">
               <span className="preview-panel-header-title">Live Preview</span>
               <div className="preview-panel-header-controls">
-                <span className="preview-fit-btn">Fit</span>
-                <span className="preview-zoom-badge">100%</span>
+                <button
+                  type="button"
+                  className={`preview-fit-btn${zoomMode === 'fit' ? ' preview-fit-btn-active' : ''}`}
+                  onClick={() => setZoomMode((m) => (m === 'fit' ? '100' : 'fit'))}
+                  aria-pressed={zoomMode === 'fit'}
+                  title={zoomMode === 'fit' ? 'Show actual size (matches the PDF)' : 'Fit to panel width'}
+                >
+                  Fit
+                </button>
+                <span className="preview-zoom-badge">{zoomMode === 'fit' ? `${fitScalePercent}%` : '100%'}</span>
               </div>
             </div>
             <Preview />
@@ -450,6 +487,15 @@ export default function Builder() {
 
         {/* ── Mobile bottom tab bar (hidden on desktop) ── */}
         <MobileTabBar mobileTab={mobileTab} setMobileTab={setMobileTab} />
+
+        {/* ── Template picker ── */}
+        {isTemplatePickerOpen && (
+          <TemplatePickerModal
+            activeTemplateId={template}
+            onSelect={setTemplate}
+            onClose={() => setIsTemplatePickerOpen(false)}
+          />
+        )}
 
       </div>
     </ResumeContext.Provider>

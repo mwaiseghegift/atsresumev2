@@ -6,6 +6,11 @@ class Resume(models.Model):
     """Model to store resume data"""
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='resumes', null=True, blank=True)
     resume_data = models.JSONField(help_text="Complete resume data in JSON format")
+    template = models.CharField(
+        max_length=50,
+        default='template1',
+        help_text="ID of the visual template used to render this resume, e.g. 'template1'"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

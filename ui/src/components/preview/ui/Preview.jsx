@@ -1,49 +1,57 @@
-/* eslint-disable react/jsx-no-undef */
-import {FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaTwitter, FaYoutube,} from "react-icons/fa";
-import {CgWebsite} from "react-icons/cg";
-import React, {useContext, useState} from "react";
-import {ResumeContext} from "../../builder";
-import dynamic from "next/dynamic";
-import ModalHighlightMenu from "../components/ModalHighlightMenu";
-import Header from "../components/Header";
-import LeftSide from "../components/LeftSide";
-import RightSide from "../components/RightSide";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { ResumeContext } from "../../builder";
 import A4PageWrapper from "../components/A4PageWrapper";
-import {onDragEndHandler} from "../utils/onDrugEndHandler";
+import Template1 from "../templates/Template1";
+import Template2 from "../templates/Template2";
+import Template3 from "../templates/Template3";
+import { DEFAULT_TEMPLATE_ID } from "../../../constants/templates";
 
-const DragDropContext = dynamic(
-  () =>
-    import("@hello-pangea/dnd").then((mod) => {
-      return mod.DragDropContext;
-    }),
-  {ssr: false}
-);
+/**
+ * Maps template registry ids (constants/templates.js) to their renderer.
+ * Add new templates here alongside a registry entry.
+ */
+const TEMPLATE_COMPONENTS = {
+  template1: Template1,
+  template2: Template2,
+  template3: Template3,
+};
+
+// .document-shell is 210mm wide (true A4, matching the @page{size:A4} print rule).
+const A4_WIDTH_PX = (210 * 96) / 25.4;
+// Horizontal padding to subtract when measuring available width: .preview-scroll (1.5rem * 2) + .document-stage (0.5rem * 2).
+const HORIZONTAL_CHROME_PX = 48 + 16;
 
 const Preview = () => {
-  const {resumeData, setResumeData} = useContext(ResumeContext);
-  const icons = [
-    {name: "github", icon: <FaGithub/>},
-    {name: "linkedin", icon: <FaLinkedin/>},
-    {name: "twitter", icon: <FaTwitter/>},
-    {name: "facebook", icon: <FaFacebook/>},
-    {name: "instagram", icon: <FaInstagram/>},
-    {name: "youtube", icon: <FaYoutube/>},
-    {name: "website", icon: <CgWebsite/>},
-  ];
+  const { resumeData, setResumeData, template, zoomMode, onFitScaleChange } = useContext(ResumeContext);
+  const TemplateComponent = TEMPLATE_COMPONENTS[template] ?? TEMPLATE_COMPONENTS[DEFAULT_TEMPLATE_ID];
+  const scrollRef = useRef(null);
+  const [fitZoom, setFitZoom] = useState(1);
+
+  /* Keep the "fit to panel" scale current as the preview panel is resized (window resize, AI drawer open/close, mobile tab switch). */
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+
+    const recompute = () => {
+      const available = el.clientWidth - HORIZONTAL_CHROME_PX;
+      const scale = Math.min(1, available / A4_WIDTH_PX);
+      setFitZoom(scale);
+      onFitScaleChange?.(Math.round(scale * 100));
+    };
+
+    recompute();
+    const observer = new ResizeObserver(recompute);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [onFitScaleChange]);
+
+  const stageStyle = zoomMode === "fit" ? { zoom: fitZoom } : undefined;
 
   return (
-    <div className="preview-scroll preview rm-padding-print">
-      <div className="document-stage">
+    <div className="preview-scroll preview rm-padding-print" ref={scrollRef}>
+      <div className="document-stage" style={stageStyle}>
         <A4PageWrapper>
-          <ModalHighlightMenu/>
-          <DragDropContext onDragEnd={onDragEndHandler}>
-            <Header resumeData={resumeData} icons={icons}/>
-            <hr className="border-dashed my-4 border-[rgba(38,70,83,0.18)]"/>
-            <div className="document-grid">
-              <LeftSide resumeData={resumeData}/>
-              <RightSide resumeData={resumeData}/>
-            </div>
-          </DragDropContext>
+          <TemplateComponent resumeData={resumeData} setResumeData={setResumeData} />
         </A4PageWrapper>
       </div>
     </div>
