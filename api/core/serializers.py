@@ -31,6 +31,12 @@ class CustomizedResumeSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at']
 
 
+class ExportPdfRequestSerializer(serializers.Serializer):
+    """Serializer for the PDF export request"""
+    resume_data = serializers.JSONField()
+    template = serializers.CharField(max_length=50, required=False, default='template1')
+
+
 class CustomizeResumeRequestSerializer(serializers.Serializer):
     """Serializer for the customize resume request"""
     resume_data = serializers.JSONField()

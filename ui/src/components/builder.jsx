@@ -24,7 +24,7 @@ import LoadUnload from "../components/form/components/LoadUnload";
 import TemplatePickerModal from "../components/TemplatePickerModal";
 import { DEFAULT_TEMPLATE_ID, getTemplate } from "../constants/templates";
 
-const Print = dynamic(() => import("../components/utility/WinPrint"), { ssr: false });
+const DownloadPdfButton = dynamic(() => import("../components/utility/DownloadPdfButton"), { ssr: false });
 
 const BLANK_RESUME = {
   name: '', position: '', contactInformation: '', email: '',
@@ -241,7 +241,7 @@ function BuilderHeader({ user, authLoading, isSaving, saveSuccess, applySuccess,
         <button onClick={onCustomize} className="builder-action-btn builder-customize-btn">
           <SparkleIcon /> Customize for Job
         </button>
-        <Print compact />
+        <DownloadPdfButton />
       </div>
 
       {/* ── User section ── */}

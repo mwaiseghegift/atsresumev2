@@ -1,13 +1,16 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from .models import Resume, JobDescription, CustomizedResume
 from .serializers import (
     ResumeSerializer, JobDescriptionSerializer,
-    CustomizedResumeSerializer, CustomizeResumeRequestSerializer
+    CustomizedResumeSerializer, CustomizeResumeRequestSerializer,
+    ExportPdfRequestSerializer
 )
 from .gemini_service import GeminiService
+from .pdf_service import PdfService
 
 
 class ResumeViewSet(viewsets.ModelViewSet):
@@ -200,7 +203,49 @@ def quick_customize(request):
             'keywords_analysis': keywords_analysis,
             'ai_suggestions': ai_suggestions,
         }, status=status.HTTP_200_OK)
-        
+
+    except Exception as e:
+        return Response({
+            'success': False,
+            'error': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def export_pdf(request):
+    """
+    Export a resume to PDF using a headless-browser render of the frontend's
+    /print route — a deterministic export that doesn't depend on the
+    requesting browser's own print dialog settings.
+
+    Request body:
+    {
+        "resume_data": {...},       // Complete resume JSON data
+        "template": "template1"     // Optional, defaults to "template1"
+    }
+    """
+    serializer = ExportPdfRequestSerializer(data=request.data)
+
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    data = serializer.validated_data
+
+    try:
+        pdf_service = PdfService()
+        pdf_bytes = pdf_service.generate_resume_pdf(
+            resume_data=data['resume_data'],
+            template=data.get('template', 'template1'),
+        )
+
+        resume_name = (data['resume_data'].get('name') or 'Resume').strip() or 'Resume'
+        safe_name = ''.join(c for c in resume_name if c.isalnum() or c in ' _-').strip() or 'Resume'
+        filename = f"{safe_name.replace(' ', '_')}_Resume.pdf"
+
+        response = HttpResponse(pdf_bytes, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+
     except Exception as e:
         return Response({
             'success': False,

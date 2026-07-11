@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     ResumeViewSet, JobDescriptionViewSet, CustomizedResumeViewSet,
-    customize_resume, quick_customize
+    customize_resume, quick_customize, export_pdf
 )
 
 # Create router for viewsets
@@ -19,4 +19,5 @@ urlpatterns = [
     # Custom endpoints
     path('customize/', customize_resume, name='customize-resume'),
     path('quick-customize/', quick_customize, name='quick-customize'),
+    path('export-pdf/', export_pdf, name='export-pdf'),
 ]

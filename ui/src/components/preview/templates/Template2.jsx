@@ -29,8 +29,14 @@ function Bullets({ text }) {
   );
 }
 
+/** Strips the protocol and "www." for display only — the href keeps the full URL. */
+function cleanUrl(url) {
+  if (!url) return "";
+  return url.replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/\/$/, "");
+}
+
 /**
- * Template 2 — "Minimal". Single-column, ATS-safe, black/blue resume:
+ * Template 2 — "Minimal". Single-column, ATS-safe, black-and-white resume:
  * centered header, date-left/content-right entries, no photo, no sidebar.
  * Read-only: renders resumeData, no inline editing or drag-to-reorder.
  */
@@ -64,7 +70,7 @@ const Template2 = ({ resumeData }) => {
                   rel="noreferrer"
                   className="t2-link"
                 >
-                  {iconEntry?.icon} {sm.link}
+                  {iconEntry?.icon} {cleanUrl(sm.link)}
                 </a>
               );
             })}
@@ -149,7 +155,7 @@ const Template2 = ({ resumeData }) => {
                 <p className="t2-entry-title">{item.name || item.title}</p>
                 {item.link && (
                   <a href={item.link} target="_blank" rel="noreferrer" className="t2-link text-[11px]">
-                    {item.link}
+                    {cleanUrl(item.link)}
                   </a>
                 )}
                 {item.description && <p className="t2-entry-body">{item.description}</p>}

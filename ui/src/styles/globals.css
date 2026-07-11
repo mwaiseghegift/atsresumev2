@@ -877,7 +877,10 @@
 }
 
 .t2-link {
-    color: #1d4ed8;
+    color: #111827;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: #9ca3af;
 }
 
 .t2-section {
@@ -911,7 +914,7 @@
 .t2-entry-date p {
     font-size: 10.5px;
     font-weight: 500;
-    color: #1d4ed8;
+    color: #4b5563;
     white-space: normal; /* safety net: wraps instead of overflowing if a date string is ever wider than the column */
 }
 
@@ -960,7 +963,7 @@
 
 .t2-skills-cat-items {
     font-size: 11px;
-    color: #1d4ed8;
+    color: #1f2937;
     line-height: 1.5;
 }
 
@@ -978,7 +981,7 @@
 
 .t2-cert-item {
     font-size: 11px;
-    color: #1d4ed8;
+    color: #1f2937;
     display: flex;
     gap: 0.4rem;
     line-height: 1.4;

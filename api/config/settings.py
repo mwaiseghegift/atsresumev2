@@ -151,4 +151,7 @@ CORS_ALLOW_CREDENTIALS = True
 # Gemini API Configuration
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
 
+# Frontend origin the PDF export service renders against (headless browser navigation target)
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+
 AUTH_USER_MODEL = 'accounts.User'

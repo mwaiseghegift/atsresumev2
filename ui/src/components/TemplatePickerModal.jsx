@@ -57,7 +57,7 @@ function Template2Thumbnail() {
     <div className="w-full aspect-210/297 rounded-md overflow-hidden bg-white border border-gray-200 p-2 flex flex-col items-center gap-1">
       <div className="h-1.5 rounded-full bg-gray-400" style={{ width: "40%" }} />
       <div className="h-1 rounded-full bg-gray-300 mt-0.5" style={{ width: "30%" }} />
-      <div className="h-0.5 rounded-full mt-1" style={{ width: "70%", backgroundColor: "#1d4ed8", opacity: 0.5 }} />
+      <div className="h-0.5 rounded-full mt-1 bg-gray-400" style={{ width: "70%" }} />
       <div className="w-full flex flex-col gap-1 mt-1.5">
         <div className="h-1 rounded-full bg-gray-300" style={{ width: "24%" }} />
         <div className="h-1 rounded-full bg-gray-200" style={{ width: "92%" }} />
