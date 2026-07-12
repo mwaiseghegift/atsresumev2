@@ -1,6 +1,8 @@
+import { API_BASE_URL, API_AUTH_CSRF } from '../../constants/api';
+
 export async function fetchCsrfToken() {
     try {
-        const res = await fetch('http://localhost:8000/api/auth/csrf/', { credentials: 'include' });
+        const res = await fetch(`${API_BASE_URL}${API_AUTH_CSRF}`, { credentials: 'include' });
         if (res.ok) {
             const data = await res.json();
             return data.csrfToken;

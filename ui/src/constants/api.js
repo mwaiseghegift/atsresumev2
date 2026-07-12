@@ -13,3 +13,4 @@ export const API_AUTH_ME = "/api/auth/me/";
 export const API_AUTH_LOGIN = "/api/auth/login/";
 export const API_AUTH_REGISTER = "/api/auth/register/";
 export const API_AUTH_LOGOUT = "/api/auth/logout/";
+export const API_AUTH_CSRF = "/api/auth/csrf/";
