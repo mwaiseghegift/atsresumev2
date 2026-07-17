@@ -2,13 +2,10 @@
 Quick diagnostic script to check available Gemini models
 """
 import os
-from dotenv import load_dotenv
+from decouple import config
 import google.generativeai as genai
 
-# Load environment variables
-load_dotenv()
-
-api_key = os.getenv('GEMINI_API_KEY')
+api_key = config('GEMINI_API_KEY', default='')
 
 if not api_key:
     print("❌ GEMINI_API_KEY not found in .env file")

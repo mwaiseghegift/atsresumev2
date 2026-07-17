@@ -34,10 +34,9 @@ def check_environment():
         return False
     
     # Load .env file
-    from dotenv import load_dotenv
-    load_dotenv()
+    from decouple import config
     
-    gemini_key = os.getenv('GEMINI_API_KEY')
+    gemini_key = config('GEMINI_API_KEY', default='')
     
     if not gemini_key or gemini_key == 'your_gemini_api_key_here':
         print("❌ GEMINI_API_KEY is not set or still has placeholder value!")
